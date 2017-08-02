@@ -16,6 +16,7 @@ function startSingleScreenApp(params) {
     return;
   }
   addNavigatorParams(screen);
+  addNavigatorOptions(screen);
   addNavigatorButtons(screen, params.drawer);
   addNavigationStyleParams(screen);
   screen.passProps = params.passProps;
@@ -36,6 +37,90 @@ function startSingleScreenApp(params) {
   params.animateShow = convertAnimationType(params.animationType);
 
   newPlatformSpecific.startApp(params);
+
+  const ret = { navigatorID: screen.navigatorID };
+  if (params.sideMenu.left) ret.drawerIDLeft = params.sideMenu.left.navigatorID;
+  if (params.sideMenu.right) ret.drawerIDRight = params.sideMenu.right.navigatorID;
+  ret.drawerID = ret.drawerIDLeft ? ret.drawerIDLeft : (ret.drawerIDRight ? ret.drawerIDRight : null);
+  return ret;
+}
+
+function updateRootScreen(params) {
+  if (!params.screen) {
+    console.error('updateRootScreen(params): params.screen is required');
+    return;
+  }
+
+  addNavigatorParams(params);
+  addNavigatorButtons(params);
+  addNavigatorOptions(params);
+  addNavigationStyleParams(params);
+
+  /*
+   * adapt to new API
+   */
+  adaptTopTabs(params, params.navigatorID);
+  params.screenId = params.screen;
+  let adapted = adaptNavigationStyleToScreenStyle(params);
+  adapted = adaptNavigationParams(adapted);
+  adapted.overrideBackPress = params.overrideBackPress;
+  let singleScreen = {};
+  singleScreen.screen = adapted;
+
+  newPlatformSpecific.startApp(singleScreen);
+}
+
+function updateDrawerToScreen(params) {
+  if (!params.screen) {
+    console.error('updateDrawerToScreen(params): params.screen is required');
+    return;
+  }
+
+  addNavigatorParams(params);
+  addNavigatorButtons(params);
+  addNavigatorOptions(params);
+  addNavigationStyleParams(params);
+
+  /*
+   * adapt to new API
+   */
+  adaptTopTabs(params, params.navigatorID);
+  params.screenId = params.screen;
+  let adapted = adaptNavigationStyleToScreenStyle(params);
+  adapted = adaptNavigationParams(adapted);
+  adapted.overrideBackPress = params.overrideBackPress;
+
+  newPlatformSpecific.updateDrawerToScreen(adapted)
+}
+
+function updateDrawerToTab(params) {
+  if (params.screen) {
+    const screen = {};
+    screen.screen = params.screen;
+    screen.navigatorButtons = params.navigatorButtons;
+
+    addNavigatorParams(screen);
+    addNavigatorButtons(screen);
+    addNavigatorOptions(screen);
+    addNavigationStyleParams(screen);
+    screen.passProps = params.passProps;
+
+    adaptTopTabs(screen, screen.navigatorID);
+    let adapted = adaptNavigationStyleToScreenStyle(screen);
+    adapted = adaptNavigationParams(adapted);
+    adapted.overrideBackPress = params.overrideBackPress;
+    adapted.screenId = params.screen;
+    params.screen = adapted;
+  }
+
+  newPlatformSpecific.updateDrawerToTab(params)
+}
+
+function addSplashScreen() {
+  newPlatformSpecific.addSplashScreen();
+}
+function removeSplashScreen() {
+  newPlatformSpecific.removeSplashScreen();
 }
 
 function getOrientation(params) {
@@ -60,6 +145,7 @@ function adaptTopTabs(screen, navigatorID) {
       addTabIcon(tab);
     }
     addNavigatorButtons(tab);
+    addNavigatorOptions(tab);
     adaptNavigationParams(tab);
     addNavigationStyleParams(tab);
     tab = adaptNavigationStyleToScreenStyle(tab);
@@ -68,6 +154,7 @@ function adaptTopTabs(screen, navigatorID) {
 
 function navigatorPush(navigator, params) {
   addNavigatorParams(params, navigator);
+  addNavigatorOptions(params);
   addNavigatorButtons(params);
   addTitleBarBackButtonIfNeeded(params);
   addNavigationStyleParams(params);
@@ -78,7 +165,6 @@ function navigatorPush(navigator, params) {
   let adapted = adaptNavigationStyleToScreenStyle(params);
   adapted = adaptNavigationParams(adapted);
   adapted.overrideBackPress = params.overrideBackPress;
-  adapted.timestamp = Date.now();
 
   newPlatformSpecific.push(adapted);
 }
@@ -105,8 +191,8 @@ function navigatorPopToRoot(navigator, params) {
   newPlatformSpecific.popToRoot(adapted);
 }
 
-function navigatorResetTo(navigator, params) {
-  addNavigatorParams(params, navigator);
+function navigatorResetTo(navigatorID, params) {
+  addNavigatorParams(params, {navigatorID});
   addNavigatorButtons(params);
   addNavigationStyleParams(params);
 
@@ -255,6 +341,7 @@ function startTabBasedApp(params) {
 
   params.tabs.forEach(function(tab, idx) {
     addNavigatorParams(tab, null, idx);
+    addNavigatorOptions(tab);
     addNavigatorButtons(tab, params.drawer);
     addNavigationStyleParams(tab);
     addTabIcon(tab);
@@ -274,6 +361,24 @@ function startTabBasedApp(params) {
   });
   params.tabs = newTabs;
 
+  if (params.screen) {
+    const screen = params.screen;
+
+    addNavigatorParams(screen);
+    addNavigatorButtons(screen);
+    addNavigatorOptions(screen);
+    addNavigationStyleParams(screen);
+    screen.passProps = params.passProps;
+
+    /*
+     * adapt to new API
+     */
+    adaptTopTabs(screen, screen.navigatorID);
+    screen.screenId = screen.screen;
+    params.screen = adaptNavigationStyleToScreenStyle(screen);
+    params.screen = adaptNavigationParams(screen);
+  }
+
   params.appStyle = convertStyleParams(params.appStyle);
   if (params.appStyle) {
     params.appStyle.orientation = getOrientation(params);
@@ -282,6 +387,12 @@ function startTabBasedApp(params) {
   params.animateShow = convertAnimationType(params.animationType);
 
   newPlatformSpecific.startApp(params);
+
+  const ret = {};
+  if (params.sideMenu.left) ret.drawerIDLeft = params.sideMenu.left.navigatorID;
+  if (params.sideMenu.right) ret.drawerIDRight = params.sideMenu.right.navigatorID;
+	ret.drawerID = ret.drawerIDLeft ? ret.drawerIDLeft : (ret.drawerIDRight ? ret.drawerIDRight : null);
+  return ret;
 }
 
 function addTabIcon(tab) {
@@ -370,11 +481,11 @@ function navigatorSetStyle(navigator, params) {
   newPlatformSpecific.setScreenStyle(navigator.screenInstanceID, style);
 }
 
-function navigatorSwitchToTab(navigator, params) {
+function navigatorSwitchToTab(navigatorID, params) {
   if (params.tabIndex >= 0) {
     newPlatformSpecific.selectBottomTabByTabIndex(params.tabIndex);
   } else {
-    newPlatformSpecific.selectBottomTabByNavigatorId(navigator.navigatorID);
+    newPlatformSpecific.selectBottomTabByNavigatorId(navigatorID);
   }
 }
 
@@ -396,8 +507,14 @@ function navigatorToggleDrawer(navigator, params) {
   }
 }
 
-function navigatorSetDrawerEnabled(navigator, params) {
-  newPlatformSpecific.setSideMenuEnabled(params.enabled, params.side);
+function navigatorDisableOpenGesture(navigator, params) {
+    const disableOpenGesture = !(params.disableOpenGesture === false);
+    newPlatformSpecific.disableOpenGesture(disableOpenGesture);
+}
+
+function navigatorDisableBackNavigation(navigator, params) {
+    const disableBackNavigation = !(params.disableBackNavigation === false);
+    newPlatformSpecific.disableBackNavigation(disableBackNavigation);
 }
 
 function navigatorToggleNavBar(navigator, params) {
@@ -421,6 +538,7 @@ function navigatorToggleTabs(navigator, params) {
 function showModal(params) {
   addNavigatorParams(params);
   addNavigatorButtons(params);
+  addNavigatorOptions(params);
   addTitleBarBackButtonIfNeeded(params);
   addNavigationStyleParams(params);
 
@@ -489,7 +607,7 @@ function addNavigatorParams(screen, navigator = null, idx = '') {
   screen.navigatorEventID = screen.screenInstanceID + '_events';
 }
 
-function addNavigatorButtons(screen, sideMenuParams) {
+function addNavigatorButtons(screen) {
 
   const Screen = Navigation.getRegisteredScreen(screen.screen);
   if (screen.navigatorButtons == null) {
@@ -530,6 +648,18 @@ function addNavigatorButtons(screen, sideMenuParams) {
   }
   if (leftButton) {
     screen.leftButton = leftButton;
+  }
+}
+
+function addNavigatorOptions(params) {
+  const Screen = Navigation.getRegisteredScreen(params.screen);
+  if (Screen.navigatorOptions) {
+    const navigatorOptions = Screen.navigatorOptions;
+    Object.keys(navigatorOptions).forEach(key => {
+        if (!params[key]) {
+	        params[key] = navigatorOptions[key];
+        }
+    });
   }
 }
 
@@ -695,6 +825,11 @@ async function getCurrentlyVisibleScreenId() {
 export default {
   startTabBasedApp,
   startSingleScreenApp,
+  updateRootScreen,
+  updateDrawerToScreen,
+  updateDrawerToTab,
+  addSplashScreen,
+  removeSplashScreen,
   navigatorPush,
   navigatorPop,
   navigatorPopToRoot,
@@ -715,7 +850,8 @@ export default {
   navigatorSwitchToTab,
   navigatorSwitchToTopTab,
   navigatorToggleDrawer,
-  navigatorSetDrawerEnabled,
+  navigatorDisableOpenGesture,
+  navigatorDisableBackNavigation,
   navigatorToggleTabs,
   navigatorToggleNavBar,
   showSnackbar,

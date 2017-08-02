@@ -10,6 +10,22 @@ function startApp(activityParams) {
   NativeReactModule.startApp(activityParams);
 }
 
+function updateDrawerToScreen(screenParams) {
+	NativeReactModule.updateDrawerToScreen(screenParams);
+}
+
+function updateDrawerToTab(screenParams) {
+	NativeReactModule.updateDrawerToTab(screenParams);
+}
+
+function addSplashScreen() {
+	NativeReactModule.addSplashScreen();
+}
+
+function removeSplashScreen() {
+	NativeReactModule.removeSplashScreen();
+}
+
 function push(screenParams) {
   savePassProps(screenParams);
   NativeReactModule.push(screenParams);
@@ -121,8 +137,12 @@ function setSideMenuVisible(animated, visible, side) {
   NativeReactModule.setSideMenuVisible(animated, visible, side);
 }
 
-function setSideMenuEnabled(enabled, side) {
-  NativeReactModule.setSideMenuEnabled(enabled, side);
+function disableOpenGesture(disableOpenGesture) {
+	NativeReactModule.disableOpenGesture(disableOpenGesture);
+}
+
+function disableBackNavigation(disableBackNavigation) {
+	NativeReactModule.disableBackNavigation(disableBackNavigation);
 }
 
 function selectTopTabByTabIndex(screenInstanceId, index) {
@@ -207,7 +227,12 @@ module.exports = {
   dismissInAppNotification,
   toggleSideMenuVisible,
   setSideMenuVisible,
-  setSideMenuEnabled,
+  disableOpenGesture,
+  disableBackNavigation,
+  updateDrawerToScreen,
+  updateDrawerToTab,
+  addSplashScreen,
+  removeSplashScreen,
   selectBottomTabByNavigatorId,
   selectBottomTabByTabIndex,
   setBottomTabBadgeByNavigatorId,
