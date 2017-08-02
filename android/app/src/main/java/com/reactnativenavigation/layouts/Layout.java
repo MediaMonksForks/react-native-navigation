@@ -69,4 +69,6 @@ public interface Layout extends ScreenStackContainer {
     void selectTopTabByScreen(String screenInstanceId);
 
     void updateScreenStyle(String screenInstanceId, Bundle styleParams);
+
+    String getCurrentlyVisibleScreenId();
 }

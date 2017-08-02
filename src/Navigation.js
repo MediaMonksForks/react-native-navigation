@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React from 'react';
-import {AppRegistry, NativeAppEventEmitter, DeviceEventEmitter, Platform} from 'react-native';
+import {AppRegistry} from 'react-native';
 import platformSpecific from './deprecated/platformSpecificDeprecated';
 import Screen from './Screen';
 
@@ -8,17 +8,6 @@ import PropRegistry from './PropRegistry';
 
 const registeredScreens = {};
 const _allNavigatorEventHandlers = {};
-const Emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
-
-Emitter.addListener('bottomTabSelected', nativeEvent => {
-  const event = {
-    ...nativeEvent,
-    type: 'TabSelected',
-  };
-  for (let i in _allNavigatorEventHandlers) {
-    _allNavigatorEventHandlers[i](event);
-  }
-});
 
 function registerScreen(screenID, generator) {
   registeredScreens[screenID] = generator;
@@ -43,7 +32,6 @@ function _registerComponentNoRedux(screenID, generator) {
     return class extends Screen {
       static navigatorStyle = InternalComponent.navigatorStyle || {};
       static navigatorButtons = InternalComponent.navigatorButtons || {};
-      static navigatorOptions = InternalComponent.navigatorOptions || {};
 
       constructor(props) {
         super(props);
@@ -75,7 +63,6 @@ function _registerComponentRedux(screenID, generator, store, Provider, options) 
     return class extends Screen {
       static navigatorStyle = InternalComponent.navigatorStyle || {};
       static navigatorButtons = InternalComponent.navigatorButtons || {};
-      static navigatorOptions = InternalComponent.navigatorOptions || {};
 
       constructor(props) {
         super(props);
@@ -152,32 +139,12 @@ function startSingleScreenApp(params) {
   return platformSpecific.startSingleScreenApp(params);
 }
 
-function updateRootScreen(params) {
-  return platformSpecific.updateRootScreen(params);
+function setEventHandler(navigatorEventID, eventHandler) {
+  _allNavigatorEventHandlers[navigatorEventID] = eventHandler;
 }
 
-function updateDrawerToScreen(params) {
-  return platformSpecific.updateDrawerToScreen(params);
-}
-
-function updateDrawerToTab(params) {
-  return platformSpecific.updateDrawerToTab(params);
-}
-
-function addSplashScreen() {
-  return platformSpecific.addSplashScreen();
-}
-
-function removeSplashScreen() {
-  return platformSpecific.removeSplashScreen();
-}
-
-function setEventHandler(uniqueID, eventHandler) {
-  _allNavigatorEventHandlers[uniqueID] = eventHandler;
-}
-
-function clearEventHandler(uniqueID) {
-  delete _allNavigatorEventHandlers[uniqueID];
+function clearEventHandler(navigatorEventID) {
+  delete _allNavigatorEventHandlers[navigatorEventID];
 }
 
 function handleDeepLink(params = {}) {
@@ -195,25 +162,30 @@ function handleDeepLink(params = {}) {
   }
 }
 
+async function isAppLaunched() {
+  return await platformSpecific.isAppLaunched();
+}
+
+function getCurrentlyVisibleScreenId() {
+  return platformSpecific.getCurrentlyVisibleScreenId();
+}
+
 export default {
   getRegisteredScreen,
+  getCurrentlyVisibleScreenId,
   registerComponent,
-  showModal,
-  dismissModal,
-  dismissAllModals,
-  showSnackbar,
-  showLightBox,
-  dismissLightBox,
-  showInAppNotification,
-  dismissInAppNotification,
-  startTabBasedApp,
-  startSingleScreenApp,
-  updateRootScreen,
-  updateDrawerToScreen,
-  updateDrawerToTab,
-  addSplashScreen,
-  removeSplashScreen,
-  setEventHandler,
-  clearEventHandler,
-  handleDeepLink
+  showModal: showModal,
+  dismissModal: dismissModal,
+  dismissAllModals: dismissAllModals,
+  showSnackbar: showSnackbar,
+  showLightBox: showLightBox,
+  dismissLightBox: dismissLightBox,
+  showInAppNotification: showInAppNotification,
+  dismissInAppNotification: dismissInAppNotification,
+  startTabBasedApp: startTabBasedApp,
+  startSingleScreenApp: startSingleScreenApp,
+  setEventHandler: setEventHandler,
+  clearEventHandler: clearEventHandler,
+  handleDeepLink: handleDeepLink,
+  isAppLaunched: isAppLaunched
 };

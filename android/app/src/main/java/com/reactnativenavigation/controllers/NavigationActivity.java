@@ -402,6 +402,22 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
         layout.dismissSnackbar();
     }
 
+    public void showContextualMenu(String screenInstanceId, ContextualMenuParams params, Callback onButtonClicked) {
+        if (modalController.isShowing()) {
+            modalController.showContextualMenu(screenInstanceId, params, onButtonClicked);
+        } else {
+            layout.showContextualMenu(screenInstanceId, params, onButtonClicked);
+        }
+    }
+
+    public void dismissContextualMenu(String screenInstanceId) {
+        if (modalController.isShowing()) {
+            modalController.dismissContextualMenu(screenInstanceId);
+        } else {
+            layout.dismissContextualMenu(screenInstanceId);
+        }
+    }
+
     @Override
     public void onEvent(Event event) {
         if (event.getType().equals(ModalDismissedEvent.TYPE)) {
@@ -444,5 +460,9 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
         if (mPermissionListener != null && mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             mPermissionListener = null;
         }
+    }
+
+    public String getCurrentlyVisibleScreenId() {
+        return modalController.isShowing() ? modalController.getCurrentlyVisibleScreenId() : layout.getCurrentlyVisibleScreenId();
     }
 }
