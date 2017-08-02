@@ -348,9 +348,13 @@ RCT_EXPORT_METHOD(
     {
         return [self getVisibleViewControllerFor:[((UINavigationController*)vc) visibleViewController]];
     }
-    else if ([vc isKindOfClass:[UITabBarController class]])
+    else if ([vc isKindOfClass:[RCCTabBarController class]])
     {
-        return [self getVisibleViewControllerFor:[((UITabBarController*)vc) selectedViewController]];
+        return [self getVisibleViewControllerFor:[((RCCTabBarController*)vc) selectedViewController]];
+    }
+    else if ([vc isKindOfClass:[MMDrawerController class]])
+    {
+        return [self getVisibleViewControllerFor:[((MMDrawerController*)vc) centerViewController]];
     }
     else if (vc.presentedViewController)
     {
