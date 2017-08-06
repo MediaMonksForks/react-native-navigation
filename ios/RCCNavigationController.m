@@ -110,20 +110,17 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
                      style:navigatorStyle];
     
     NSString *backButtonTitle = actionParams[@"backButtonTitle"];
-    if (backButtonTitle)
+    if (!backButtonTitle)
     {
-      UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backButtonTitle
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:nil
-                                                                  action:nil];
-      
-      self.topViewController.navigationItem.backBarButtonItem = backItem;
+      backButtonTitle = @"";
     }
-    else
-    {
-      self.topViewController.navigationItem.backBarButtonItem = nil;
-    }
-    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backButtonTitle
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:nil
+                                                                action:nil];
+
+    self.topViewController.navigationItem.backBarButtonItem = backItem;
+
     NSNumber *backButtonHidden = actionParams[@"backButtonHidden"];
     BOOL backButtonHiddenBool = backButtonHidden ? [backButtonHidden boolValue] : NO;
     if (backButtonHiddenBool)
