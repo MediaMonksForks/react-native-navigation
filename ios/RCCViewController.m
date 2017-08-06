@@ -132,7 +132,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   
   self = [super init];
   if (!self) return nil;
-  
+
   [self commonInit:reactView navigatorStyle:navigatorStyle props:passProps];
   
   return self;
@@ -151,7 +151,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRNReload) name:RCTJavaScriptWillStartLoadingNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCancelReactTouches) name:RCCViewControllerCancelReactTouchesNotification object:nil];
-  
+
   // In order to support 3rd party native ViewControllers, we support passing a class name as a prop mamed `ExternalNativeScreenClass`
   // In this case, we create an instance and add it as a child ViewController which preserves the VC lifecycle.
   // In case some props are necessary in the native ViewController, the ExternalNativeScreenProps can be used to pass them
@@ -182,7 +182,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   if ([self.view isKindOfClass:[RCTRootView class]]){
     
     RCTRootView *rootView = (RCTRootView *)self.view;
-    
+
     if (rootView.appProperties && rootView.appProperties[@"navigatorEventID"]) {
       
       [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:rootView.appProperties[@"navigatorEventID"] body:@
@@ -198,6 +198,23 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 {
   [super viewDidAppear:animated];
   [self sendScreenChangedEvent:@"didAppear"];
+
+	RCTRootView *rootView = (RCTRootView *)self.view;
+	NSLog(@"a%@", NSStringFromCGRect(rootView.bounds));
+	NSLog(@"a%@", NSStringFromCGRect(rootView.contentView.bounds));
+	NSLog(@"a%@", NSStringFromCGRect(self.navigationController.view.bounds));
+
+	[self.navigationController.view layoutSubviews];
+}
+
+- (void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+
+	RCTRootView *rootView = (RCTRootView *)self.view;
+	NSLog(@"b%@", NSStringFromCGRect(rootView.bounds));
+	NSLog(@"b%@", NSStringFromCGRect(rootView.contentView.bounds));
+	NSLog(@"b%@", NSStringFromCGRect(self.navigationController.view.bounds));
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -205,6 +222,11 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   [super viewWillAppear:animated];
   [self sendScreenChangedEvent:@"willAppear"];
   [self setStyleOnAppear];
+
+	RCTRootView *rootView = (RCTRootView *)self.view;
+	NSLog(@"c%@", NSStringFromCGRect(rootView.bounds));
+	NSLog(@"c%@", NSStringFromCGRect(rootView.contentView.bounds));
+	NSLog(@"c%@", NSStringFromCGRect(self.navigationController.view.bounds));
 }
 
 - (void)viewDidDisappear:(BOOL)animated
