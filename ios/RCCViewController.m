@@ -132,7 +132,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   
   self = [super init];
   if (!self) return nil;
-  
+
   [self commonInit:reactView navigatorStyle:navigatorStyle props:passProps];
   
   return self;
@@ -151,7 +151,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRNReload) name:RCTJavaScriptWillStartLoadingNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCancelReactTouches) name:RCCViewControllerCancelReactTouchesNotification object:nil];
-  
+
   // In order to support 3rd party native ViewControllers, we support passing a class name as a prop mamed `ExternalNativeScreenClass`
   // In this case, we create an instance and add it as a child ViewController which preserves the VC lifecycle.
   // In case some props are necessary in the native ViewController, the ExternalNativeScreenProps can be used to pass them
@@ -182,7 +182,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   if ([self.view isKindOfClass:[RCTRootView class]]){
     
     RCTRootView *rootView = (RCTRootView *)self.view;
-    
+
     if (rootView.appProperties && rootView.appProperties[@"navigatorEventID"]) {
       
       [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:rootView.appProperties[@"navigatorEventID"] body:@
@@ -198,6 +198,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 {
   [super viewDidAppear:animated];
   [self sendScreenChangedEvent:@"didAppear"];
+  [self.navigationController.view layoutSubviews];
 }
 
 - (void)viewWillAppear:(BOOL)animated
