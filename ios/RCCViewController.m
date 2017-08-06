@@ -198,23 +198,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 {
   [super viewDidAppear:animated];
   [self sendScreenChangedEvent:@"didAppear"];
-
-	RCTRootView *rootView = (RCTRootView *)self.view;
-	NSLog(@"a%@", NSStringFromCGRect(rootView.bounds));
-	NSLog(@"a%@", NSStringFromCGRect(rootView.contentView.bounds));
-	NSLog(@"a%@", NSStringFromCGRect(self.navigationController.view.bounds));
-
-	[self.navigationController.view layoutSubviews];
-}
-
-- (void)viewDidLayoutSubviews
-{
-	[super viewDidLayoutSubviews];
-
-	RCTRootView *rootView = (RCTRootView *)self.view;
-	NSLog(@"b%@", NSStringFromCGRect(rootView.bounds));
-	NSLog(@"b%@", NSStringFromCGRect(rootView.contentView.bounds));
-	NSLog(@"b%@", NSStringFromCGRect(self.navigationController.view.bounds));
+  [self.navigationController.view layoutSubviews];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -222,11 +206,6 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   [super viewWillAppear:animated];
   [self sendScreenChangedEvent:@"willAppear"];
   [self setStyleOnAppear];
-
-	RCTRootView *rootView = (RCTRootView *)self.view;
-	NSLog(@"c%@", NSStringFromCGRect(rootView.bounds));
-	NSLog(@"c%@", NSStringFromCGRect(rootView.contentView.bounds));
-	NSLog(@"c%@", NSStringFromCGRect(self.navigationController.view.bounds));
 }
 
 - (void)viewDidDisappear:(BOOL)animated

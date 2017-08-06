@@ -390,8 +390,8 @@
                         options: (hidden ? UIViewAnimationOptionCurveEaseIn : UIViewAnimationOptionCurveEaseOut)
                      animations:^()
      {
-		 [self.navigationController.view setNeedsLayout];
-		 [self.navigationController.view layoutIfNeeded];
+		 [self.view setNeedsLayout];
+		 [self.view layoutIfNeeded];
      }
                      completion:^(BOOL finished)
      {
