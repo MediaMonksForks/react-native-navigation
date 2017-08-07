@@ -581,7 +581,7 @@ function dismissLightBox() {
 }
 
 function dismissModal() {
-  newPlatformSpecific.dismissTopModal();
+  return newPlatformSpecific.dismissTopModal();
 }
 
 function dismissAllModals(params) {

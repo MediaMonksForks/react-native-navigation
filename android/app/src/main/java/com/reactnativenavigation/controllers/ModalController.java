@@ -2,8 +2,10 @@ package com.reactnativenavigation.controllers;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 
+import com.facebook.react.bridge.Promise;
 import com.reactnativenavigation.events.EventBus;
 import com.reactnativenavigation.events.ModalDismissedEvent;
 import com.reactnativenavigation.layouts.ScreenStackContainer;
@@ -20,8 +22,9 @@ import java.util.Stack;
 class ModalController implements ScreenStackContainer, Modal.OnModalDismissedListener {
     private final AppCompatActivity activity;
     private Stack<Modal> stack = new Stack<>();
+	private Promise _dismissPromise;
 
-    ModalController(AppCompatActivity activity) {
+	ModalController(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -40,8 +43,9 @@ class ModalController implements ScreenStackContainer, Modal.OnModalDismissedLis
         stack.add(modal);
     }
 
-    void dismissTopModal() {
+    void dismissTopModal(Promise promise) {
         if (isShowing()) {
+			_dismissPromise = promise;
             stack.pop().dismiss();
         }
     }
@@ -87,11 +91,15 @@ class ModalController implements ScreenStackContainer, Modal.OnModalDismissedLis
 
     @Override
     public void onModalDismissed(Modal modal) {
-        stack.remove(modal);
+		stack.remove(modal);
         if (isShowing()) {
             stack.peek().onModalDismissed();
         }
         EventBus.instance.post(new ModalDismissedEvent());
+		if (_dismissPromise != null) {
+			_dismissPromise.resolve("");
+			_dismissPromise = null;
+		}
     }
 
     public void setTopBarVisible(String screenInstanceId, boolean hidden, boolean animated) {

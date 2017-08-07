@@ -79,7 +79,7 @@ function dismissLightBox() {
 }
 
 function dismissTopModal() {
-  NativeReactModule.dismissTopModal();
+  return NativeReactModule.dismissTopModal();
 }
 
 function dismissAllModals() {
