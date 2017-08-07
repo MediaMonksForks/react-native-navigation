@@ -11,13 +11,13 @@ const _allNavigatorEventHandlers = {};
 const Emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
 
 Emitter.addListener('bottomTabSelected', nativeEvent => {
-  const event = {
-    ...nativeEvent,
-    type: 'TabSelected',
-  };
-  for (let i in _allNavigatorEventHandlers) {
-    _allNavigatorEventHandlers[i](event);
-  }
+	const event = {
+		...nativeEvent,
+		type: 'TabSelected',
+	};
+	for (let i in _allNavigatorEventHandlers) {
+		_allNavigatorEventHandlers[i](event);
+	}
 });
 
 function registerScreen(screenID, generator) {
@@ -151,33 +151,36 @@ function startTabBasedApp(params) {
 function startSingleScreenApp(params) {
   return platformSpecific.startSingleScreenApp(params);
 }
-
 function updateRootScreen(params) {
-  return platformSpecific.updateRootScreen(params);
+	return platformSpecific.updateRootScreen(params);
 }
 
 function updateDrawerToScreen(params) {
-  return platformSpecific.updateDrawerToScreen(params);
+	return platformSpecific.updateDrawerToScreen(params);
 }
 
 function updateDrawerToTab(params) {
-  return platformSpecific.updateDrawerToTab(params);
+	return platformSpecific.updateDrawerToTab(params);
+}
+
+function setEventHandler(navigatorEventID, eventHandler) {
+  _allNavigatorEventHandlers[navigatorEventID] = eventHandler;
+}
+
+function clearEventHandler(navigatorEventID) {
+  delete _allNavigatorEventHandlers[navigatorEventID];
 }
 
 function addSplashScreen() {
-  return platformSpecific.addSplashScreen();
+	return platformSpecific.addSplashScreen();
 }
 
 function removeSplashScreen() {
-  return platformSpecific.removeSplashScreen();
+	return platformSpecific.removeSplashScreen();
 }
 
 function setEventHandler(uniqueID, eventHandler) {
-  _allNavigatorEventHandlers[uniqueID] = eventHandler;
-}
-
-function clearEventHandler(uniqueID) {
-  delete _allNavigatorEventHandlers[uniqueID];
+	_allNavigatorEventHandlers[uniqueID] = eventHandler;
 }
 
 function handleDeepLink(params = {}) {
@@ -195,8 +198,17 @@ function handleDeepLink(params = {}) {
   }
 }
 
+async function isAppLaunched() {
+  return await platformSpecific.isAppLaunched();
+}
+
+function getCurrentlyVisibleScreenId() {
+  return platformSpecific.getCurrentlyVisibleScreenId();
+}
+
 export default {
   getRegisteredScreen,
+  getCurrentlyVisibleScreenId,
   registerComponent,
   showModal,
   dismissModal,

@@ -11,19 +11,19 @@ function startApp(activityParams) {
 }
 
 function updateDrawerToScreen(screenParams) {
-  NativeReactModule.updateDrawerToScreen(screenParams);
+	NativeReactModule.updateDrawerToScreen(screenParams);
 }
 
 function updateDrawerToTab(screenParams) {
-  NativeReactModule.updateDrawerToTab(screenParams);
+	NativeReactModule.updateDrawerToTab(screenParams);
 }
 
 function addSplashScreen() {
-  NativeReactModule.addSplashScreen();
+	NativeReactModule.addSplashScreen();
 }
 
 function removeSplashScreen() {
-  NativeReactModule.removeSplashScreen();
+	NativeReactModule.removeSplashScreen();
 }
 
 function push(screenParams) {
@@ -138,11 +138,11 @@ function setSideMenuVisible(animated, visible, side) {
 }
 
 function disableOpenGesture(disableOpenGesture) {
-    NativeReactModule.disableOpenGesture(disableOpenGesture);
+	NativeReactModule.disableOpenGesture(disableOpenGesture);
 }
 
 function disableBackNavigation(disableBackNavigation) {
-    NativeReactModule.disableBackNavigation(disableBackNavigation);
+	NativeReactModule.disableBackNavigation(disableBackNavigation);
 }
 
 function selectTopTabByTabIndex(screenInstanceId, index) {
@@ -161,6 +161,14 @@ function selectBottomTabByTabIndex(index) {
   NativeReactModule.selectBottomTabByTabIndex(index);
 }
 
+function setBottomTabBadgeByIndex(index, badge) {
+  NativeReactModule.setBottomTabBadgeByIndex(index, badge);
+}
+
+function setBottomTabBadgeByNavigatorId(navigatorId, badge) {
+  NativeReactModule.setBottomTabBadgeByNavigatorId(navigatorId, badge);
+}
+
 function setBottomTabButtonByIndex(index, params) {
   NativeReactModule.setBottomTabButtonByIndex(index, params);
 }
@@ -177,8 +185,24 @@ function dismissSnackbar() {
   NativeReactModule.dismissSnackbar();
 }
 
+function showContextualMenu(screenInstanceID, params, onButtonPressed) {
+  NativeReactModule.showContextualMenu(screenInstanceID, params, onButtonPressed);
+}
+
+function dismissContextualMenu(screenInstanceID) {
+  NativeReactModule.dismissContextualMenu(screenInstanceID);
+}
+
 function setScreenStyle(screenInstanceId, style) {
   NativeReactModule.setScreenStyle(screenInstanceId, style);
+}
+
+async function isAppLaunched() {
+  return await NativeReactModule.isAppLaunched();
+}
+
+async function getCurrentlyVisibleScreenId() {
+  return await NativeReactModule.getCurrentlyVisibleScreenId();
 }
 
 module.exports = {
@@ -211,9 +235,15 @@ module.exports = {
   removeSplashScreen,
   selectBottomTabByNavigatorId,
   selectBottomTabByTabIndex,
+  setBottomTabBadgeByNavigatorId,
+  setBottomTabBadgeByIndex,
   setBottomTabButtonByNavigatorId,
   setBottomTabButtonByIndex,
   showSnackbar,
   dismissSnackbar,
-  setScreenStyle
+  showContextualMenu,
+  dismissContextualMenu,
+  setScreenStyle,
+  isAppLaunched,
+  getCurrentlyVisibleScreenId
 };
