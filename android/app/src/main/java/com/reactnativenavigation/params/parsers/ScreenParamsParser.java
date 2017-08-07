@@ -27,7 +27,7 @@ public class ScreenParamsParser extends Parser {
     public static ScreenParams parse(Bundle params) {
         ScreenParams result = new ScreenParams();
         result.screenId = params.getString(KEY_SCREEN_ID);
-        assertKeyExists(params, KEY_NAVIGATION_PARAMS);
+		assertKeyExists(params, KEY_NAVIGATION_PARAMS);
         result.navigationParams = new NavigationParams(params.getBundle(KEY_NAVIGATION_PARAMS));
 
         result.styleParams = new StyleParamsParser(params.getBundle(STYLE_PARAMS)).parse();

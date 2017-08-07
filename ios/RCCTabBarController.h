@@ -12,4 +12,6 @@
 
 - (void)showScreen:(RCCNavigationController *)screen;
 
+- (UIViewController *)selectedViewController;
+
 @end

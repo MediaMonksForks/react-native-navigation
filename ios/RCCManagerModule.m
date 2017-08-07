@@ -342,6 +342,39 @@ RCT_EXPORT_METHOD(
                                                                     completion:^(){ resolve(nil); }];
 }
 
+- (UIViewController *) getVisibleViewControllerFor:(UIViewController *)vc
+{
+    if ([vc isKindOfClass:[UINavigationController class]])
+    {
+        return [self getVisibleViewControllerFor:[((UINavigationController*)vc) visibleViewController]];
+    }
+    else if ([vc isKindOfClass:[RCCTabBarController class]])
+    {
+        return [self getVisibleViewControllerFor:[((RCCTabBarController*)vc) selectedViewController]];
+    }
+    else if ([vc isKindOfClass:[MMDrawerController class]])
+    {
+        return [self getVisibleViewControllerFor:[((MMDrawerController*)vc) centerViewController]];
+    }
+    else if (vc.presentedViewController)
+    {
+        return [self getVisibleViewControllerFor:vc.presentedViewController];
+    }
+    else
+    {
+        return vc;
+    }
+}
+
+RCT_EXPORT_METHOD(getCurrentlyVisibleScreenId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    UIViewController *rootVC = [UIApplication sharedApplication].delegate.window.rootViewController;
+    UIViewController *visibleVC = [self getVisibleViewControllerFor:rootVC];
+    NSString *controllerId = [[RCCManager sharedIntance] getIdForController:visibleVC];
+    id result = (controllerId != nil) ? @{@"screenId": controllerId} : nil;
+    resolve(result);
+}
+
 -(BOOL)viewControllerIsModal:(UIViewController*)viewController
 {
     BOOL viewControllerIsModal = (viewController.presentingViewController.presentedViewController == viewController)

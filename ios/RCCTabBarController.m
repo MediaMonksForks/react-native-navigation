@@ -451,6 +451,10 @@
   }
 }
 
+- (UIViewController *)selectedViewController {
+  return self.viewControllers[self.selectedIndex];
+}
+
 +(void)sendScreenTabChangedEvent:(UIViewController*)viewController body:(NSDictionary*)body{
   [RCCTabBarController sendTabEvent:@"bottomTabSelected" controller:viewController body:body];
 }

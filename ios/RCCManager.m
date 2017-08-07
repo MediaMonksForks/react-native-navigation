@@ -1,7 +1,9 @@
 #import "RCCManager.h"
+#import "RCCViewController.h"
 #import <React/RCTBridge.h>
 #import <React/RCTRedBox.h>
 #import <Foundation/Foundation.h>
+#import <React/RCTRootView.h>
 
 static const int SPLASH_TAG = 54379;
 
@@ -122,6 +124,32 @@ static const int SPLASH_TAG = 54379;
 {
   NSDictionary *drawers = self.modulesRegistry[@"DrawerControllerIOS"];
   return drawers.allValues.firstObject;
+}
+
+-(NSString*) getIdForController:(UIViewController*)vc
+{
+  if([vc isKindOfClass:[RCCViewController class]])
+  {
+    NSString *controllerId = ((RCTRootView *)((RCCViewController*)vc).view).moduleName;
+    if(controllerId != nil)
+    {
+      return controllerId;
+    }
+  }
+  
+  for (NSString *key in [self.modulesRegistry allKeys])
+  {
+    NSMutableDictionary *componentsDic = self.modulesRegistry[key];
+    for (NSString *componentID in [componentsDic allKeys])
+    {
+      UIViewController *tmpVc = componentsDic[componentID];
+      if (tmpVc == vc)
+      {
+        return componentID;
+      }
+    }
+  }
+  return nil;
 }
 
 -(void)initBridgeWithBundleURL:(NSURL *)bundleURL
