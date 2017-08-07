@@ -294,7 +294,7 @@ public class NavigationCommandsHandler {
         });
     }
 
-    public static void dismissTopModal() {
+    public static void dismissTopModal(final Promise promise) {
         final NavigationActivity currentActivity = NavigationActivity.currentActivity;
         if (currentActivity == null) {
             return;
@@ -303,7 +303,7 @@ public class NavigationCommandsHandler {
         NavigationApplication.instance.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                currentActivity.dismissTopModal();
+                currentActivity.dismissTopModal(promise);
             }
         });
     }

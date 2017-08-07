@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
@@ -265,8 +266,8 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
         modalController.showModal(screenParams);
     }
 
-    void dismissTopModal() {
-        modalController.dismissTopModal();
+    void dismissTopModal(Promise promise) {
+        modalController.dismissTopModal(promise);
         Screen previousScreen = layout.getCurrentScreen();
         NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willAppear", previousScreen.getNavigatorEventId());
         NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didAppear", previousScreen.getNavigatorEventId());
