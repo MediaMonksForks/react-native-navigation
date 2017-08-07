@@ -156,3 +156,15 @@ Navigation.startSingleScreenApp({
 ## Extended TabBar behavior
 You can now add a screen object when starting a tab-based app. Just
 like how you start a single-screen app.
+
+## Get screen ID
+You can retrieve the current screen Id, used to register the component.
+
+Example:
+
+```js
+      Navigation.getCurrentlyVisibleScreenId().then(result => {
+        console.log(result);
+      });
+
+```
