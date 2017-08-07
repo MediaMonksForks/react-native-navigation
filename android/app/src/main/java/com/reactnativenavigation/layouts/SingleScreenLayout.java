@@ -281,7 +281,7 @@ public class SingleScreenLayout extends BaseLayout implements MenuButtonOnClickL
 
     @Override
     public String getCurrentlyVisibleScreenId() {
-        return stack.peek().getScreenInstanceId();
+        return stack.peek().getScreenParams().getScreenId();
     }
 
     @Override

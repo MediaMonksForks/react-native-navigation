@@ -30,6 +30,10 @@ public class BaseScreenParams {
         return navigationParams.screenInstanceId;
     }
 
+    public String getScreenId() {
+		return screenId;
+	}
+
     public String getNavigatorId() {
         return navigationParams.navigatorId;
     }

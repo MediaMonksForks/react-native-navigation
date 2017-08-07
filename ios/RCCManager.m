@@ -3,6 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTRedBox.h>
 #import <Foundation/Foundation.h>
+#import <React/RCTRootView.h>
 
 static const int SPLASH_TAG = 54379;
 
@@ -129,7 +130,7 @@ static const int SPLASH_TAG = 54379;
 {
   if([vc isKindOfClass:[RCCViewController class]])
   {
-    NSString *controllerId = ((RCCViewController*)vc).controllerId;
+    NSString *controllerId = ((RCTRootView *)((RCCViewController*)vc).view).moduleName;
     if(controllerId != nil)
     {
       return controllerId;

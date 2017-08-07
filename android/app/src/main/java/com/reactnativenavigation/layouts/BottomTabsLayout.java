@@ -242,7 +242,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
 
     @Override
     public String getCurrentlyVisibleScreenId() {
-        return getCurrentScreen().getScreenInstanceId();
+        return getCurrentScreen().getScreenParams().getScreenId();
     }
 
     @Override

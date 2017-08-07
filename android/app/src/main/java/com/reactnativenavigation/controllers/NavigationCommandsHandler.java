@@ -533,7 +533,7 @@ public class NavigationCommandsHandler {
     }
 
     public static void isAppLaunched(Promise promise) {
-        final boolean isAppLaunched = SplashActivity.isResumed || NavigationActivity.currentActivity != null;
+        final boolean isAppLaunched = NavigationActivity.currentActivity != null;
         promise.resolve(isAppLaunched);
     }
 
