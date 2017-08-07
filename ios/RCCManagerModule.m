@@ -150,9 +150,9 @@ RCT_EXPORT_MODULE(RCCManager);
                            {
                                counter++;
                                
-                               [[RCCManager sharedIntance] unregisterController:viewController];
                                if (viewController.presentedViewController != nil)
                                {
+                               		[[RCCManager sharedIntance] unregisterController:viewController.presentedViewController];
                                    dispatch_semaphore_t dismiss_sema = dispatch_semaphore_create(0);
                                    
                                    dispatch_async(dispatch_get_main_queue(), ^
