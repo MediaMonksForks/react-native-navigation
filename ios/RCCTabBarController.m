@@ -294,17 +294,20 @@
 
   if (self.holder.subviews.count == 0) {
     RCCNavigationController *navigationController = self.viewControllers.lastObject;
+    NSString *moduleName = ((RCTRootView *)navigationController.viewControllers.firstObject.view).moduleName;
+	__block NSUInteger index = self.viewControllers.count - 1;
+    if (![moduleName isEqualToString:@""]) {
+		[self.viewControllers enumerateObjectsUsingBlock:^(__kindof UINavigationController *obj, NSUInteger idx, BOOL *stop)
+		{
+			NSString *tabModuleName = ((RCTRootView *)obj.viewControllers.firstObject.view).moduleName;
+			if ([tabModuleName isEqualToString:moduleName]) {
+				index = idx;
+				*stop = YES;
+			}
+		}];
+	}
 
-    [self addChildViewController:navigationController];
-    navigationController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.holder addSubview:navigationController.view];
-    [navigationController didMoveToParentViewController:self];
-
-    NSDictionary *views = @{ @"view": navigationController.view };
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[view]-0-|" options:nil metrics:nil views:views]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:nil metrics:nil views:views]];
-
-    _selectedViewController = navigationController;
+    [self setSelectedIndex:index];
   }
 }
 
