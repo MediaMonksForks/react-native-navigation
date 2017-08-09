@@ -342,6 +342,7 @@
   if ([performAction isEqualToString:@"setTabButton"])
   {
     UIViewController *viewController = nil;
+    UITabBarItem *tabBarItem = nil;
     NSNumber *tabIndex = actionParams[@"tabIndex"];
     if (tabIndex)
     {
@@ -351,6 +352,10 @@
       {
         viewController = self.viewControllers[i];
       }
+      if ([self.tabBar.items count] > i)
+      {
+        tabBarItem = self.tabBar.items[i];
+      }
     }
     NSString *contentId = actionParams[@"contentId"];
     NSString *contentType = actionParams[@"contentType"];
@@ -359,7 +364,7 @@
       viewController = [[RCCManager sharedInstance] getControllerWithId:contentId componentType:contentType];
     }
     
-    if (viewController)
+    if (viewController && tabBarItem)
     {
       UIImage *iconImage = nil;
       id icon = actionParams[@"icon"];
@@ -368,7 +373,7 @@
         iconImage = [RCTConvert UIImage:icon];
         iconImage = [[self image:iconImage withColor:self.tabBar.tintColor] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         viewController.tabBarItem.image = iconImage;
-      
+        tabBarItem.image = iconImage;
       }
       UIImage *iconImageSelected = nil;
       id selectedIcon = actionParams[@"selectedIcon"];
@@ -376,6 +381,11 @@
       {
         iconImageSelected = [RCTConvert UIImage:selectedIcon];
         viewController.tabBarItem.selectedImage = iconImageSelected;
+        tabBarItem.selectedImage = iconImage;
+      }
+      NSString *label = actionParams[@"label"];
+      if (label) {
+        tabBarItem.title = label;
       }
     }
   }

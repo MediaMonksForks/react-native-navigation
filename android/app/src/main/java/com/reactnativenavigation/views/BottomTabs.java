@@ -58,6 +58,11 @@ public class BottomTabs extends AHBottomNavigation {
             item.setDrawable(params.tabIcon);
             refresh();
         }
+        if (params.tabLabel != null) {
+			AHBottomNavigationItem item = this.getItem(index);
+			item.setTitle(params.tabLabel);
+			refresh();
+		}
     }
 
     public void setVisibility(final boolean hidden, boolean animated) {
