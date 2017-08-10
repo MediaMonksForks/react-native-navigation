@@ -121,9 +121,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   if (!self) return nil;
   
   [self commonInit:reactView navigatorStyle:navigatorStyle props:props];
-  
-  self.navigationController.interactivePopGestureRecognizer.delegate = self;
-  
+
   return self;
 }
 
@@ -151,9 +149,9 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   self.automaticallyAdjustsScrollViewInsets = NO; // default
   
   self.navigatorStyle = navigatorStyle.mutableCopy;
-  
+
   [self setStyleOnInit];
-  
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRNReload) name:RCTJavaScriptWillStartLoadingNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCancelReactTouches) name:RCCViewControllerCancelReactTouchesNotification object:nil];
 
@@ -211,6 +209,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   [super viewWillAppear:animated];
   [self sendScreenChangedEvent:@"willAppear"];
   [self setStyleOnAppear];
+  self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
