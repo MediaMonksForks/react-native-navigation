@@ -593,7 +593,8 @@ function navigatorSetTitle(navigator, params) {
     subtitle: params.subtitle,
     titleImage: params.titleImage,
     style: params.navigatorStyle,
-    isSetSubtitle: false
+    isSetSubtitle: false,
+    screen: navigator,
   });
 }
 
