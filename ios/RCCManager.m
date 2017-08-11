@@ -115,6 +115,10 @@ static const int SPLASH_TAG = 54379;
   if (componentsDic != nil)
   {
     component = componentsDic[componentId];
+
+	  if (!component && componentsDic.allValues.count == 1) {
+		  component = componentsDic.allValues.firstObject;
+	  }
   }
 
   return component;
