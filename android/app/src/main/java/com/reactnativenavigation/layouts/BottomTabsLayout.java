@@ -203,6 +203,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].setScreenTitleBarTitle(screenInstanceId, title);
         }
+		if (extraScreenStack != null) {
+			extraScreenStack.setScreenTitleBarTitle(screenInstanceId, title);
+		}
     }
 
     @Override
@@ -210,6 +213,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].setScreenTitleBarSubtitle(screenInstanceId, subtitle);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.setScreenTitleBarSubtitle(screenInstanceId, subtitle);
+		}
     }
 
     @Override
@@ -217,6 +223,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].setScreenTitleBarRightButtons(screenInstanceId, navigatorEventId, titleBarButtons);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.setScreenTitleBarRightButtons(screenInstanceId, navigatorEventId, titleBarButtons);
+		}
     }
 
     @Override
@@ -224,6 +233,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].setScreenTitleBarLeftButton(screenInstanceId, navigatorEventId, titleBarLeftButtonParams);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.setScreenTitleBarLeftButton(screenInstanceId, navigatorEventId, titleBarLeftButtonParams);
+		}
     }
 
     @Override
@@ -231,6 +243,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].setFab(screenInstanceId, fabParams);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.setFab(screenInstanceId, fabParams);
+		}
     }
 
     @Override
@@ -238,6 +253,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].updateScreenStyle(screenInstanceId, styleParams);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.updateScreenStyle(screenInstanceId, styleParams);
+		}
     }
 
     @Override
@@ -250,6 +268,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].selectTopTabByTabIndex(screenInstanceId, index);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.selectTopTabByTabIndex(screenInstanceId, index);
+		}
     }
 
     @Override
@@ -257,6 +278,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         for (int i = 0; i < bottomTabs.getItemsCount(); i++) {
             screenStacks[i].selectTopTabByScreen(screenInstanceId);
         }
+        if (extraScreenStack != null) {
+			extraScreenStack.selectTopTabByScreen(screenInstanceId);
+		}
     }
 
     @Override
