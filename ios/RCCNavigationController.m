@@ -52,7 +52,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   if (!self) return nil;
   self.delegate = self;
   
-  self.navigationBar.translucent = NO; // default
+  self.navigationBar.translucent = YES; // default
   
   [self processTitleView:viewController
                    props:props
