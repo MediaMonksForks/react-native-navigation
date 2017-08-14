@@ -334,9 +334,16 @@ RCT_EXPORT_METHOD(
             NSString *presentationStyle = style[@"modalPresentationStyle"];
             UIModalPresentationStyle modalPresentationStyle = [RCTConvert UIModalPresentationStyle:presentationStyle];
             controller.modalPresentationStyle = modalPresentationStyle;
+
+			if (modalPresentationStyle == UIModalPresentationOverCurrentContext)
+			{
+				controller.view.backgroundColor = [UIColor clearColor];
+				UINavigationController *navigationController = (UINavigationController *)controller;
+				navigationController.topViewController.view.backgroundColor = [UIColor clearColor];
+			}
         }
-    }
-    
+	}
+
     [[RCCManagerModule lastModalPresenterViewController] presentViewController:controller
                                                                       animated:![animationType isEqualToString:@"none"]
                                                                     completion:^(){ resolve(nil); }];
