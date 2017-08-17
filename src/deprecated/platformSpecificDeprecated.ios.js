@@ -596,7 +596,7 @@ function navigatorSetTitle(navigator, params) {
     isSetSubtitle: false,
     screen: navigator,
     navigatorID: navigator.navigatorID,
-    screenID: navigator.screenInstanceID,
+    screenInstanceID: navigator.screenInstanceID,
   });
 }
 
