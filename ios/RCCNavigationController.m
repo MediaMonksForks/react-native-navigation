@@ -261,8 +261,8 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   if ([performAction isEqualToString:@"setTitle"] || [performAction isEqualToString:@"setTitleImage"])
   {
     NSDictionary *navigatorStyle = actionParams[@"style"];
-	NSString *screenID = actionParams[@"screen"][@"screenInstanceID"];
-	NSString *navigatorID = actionParams[@"screen"][@"navigatorID"];
+	NSString *screenID = actionParams[@"screenInstanceID"];
+	NSString *navigatorID = actionParams[@"navigatorID"];
 
 	  __block UIViewController *controller = self.topViewController;
 	  [self.viewControllers enumerateObjectsUsingBlock:^(__kindof RCCViewController *obj, NSUInteger idx, BOOL *stop)
