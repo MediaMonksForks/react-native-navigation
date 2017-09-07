@@ -249,11 +249,30 @@ RCT_EXPORT_METHOD(
     // dismiss the modal controllers without animation just so they can be released
     [self dismissAllControllers:@"none" resolver:^(id result)
      {
+		 UIView *splashView;
+
+		 if (!snapshot) {
+		 	[self addSplashScreen];
+			 splashView = appDelegate.window.rootViewController.view;
+		 }
+
          // set the new controller as the root
          appDelegate.window.rootViewController = controller;
          [appDelegate.window makeKeyAndVisible];
          [presentedViewController dismissViewControllerAnimated:NO completion:nil];
          
+		 if (splashView) {
+			 [appDelegate.window addSubview:splashView];
+
+			 [UIView animateWithDuration:.3 delay:.5 options:UIViewAnimationOptionCurveEaseOut animations:^
+			 {
+				 splashView.alpha = 0;
+			 } completion:^(BOOL finished)
+			 {
+				 [splashView removeFromSuperview];
+			 }];
+		 }
+
          if (animated)
          {
              // move the snaphot to the new root and animate it
