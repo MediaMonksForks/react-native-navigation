@@ -117,7 +117,7 @@ RCT_EXPORT_MODULE(RCCManager);
 
 -(void)animateSnapshot:(UIView*)snapshot animationType:(NSString*)animationType resolver:(RCTPromiseResolveBlock)resolve
 {
-    [UIView animateWithDuration:kSlideDownAnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^()
+    [UIView animateWithDuration:kSlideDownAnimationDuration delay:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^()
      {
          if (animationType == nil || [animationType isEqualToString:@"slide-down"])
          {
