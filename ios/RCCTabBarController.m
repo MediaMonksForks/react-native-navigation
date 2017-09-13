@@ -82,14 +82,14 @@
 
   UIView *tabBarHolder = [[UIView alloc] init];
   tabBarHolder.translatesAutoresizingMaskIntoConstraints = NO;
+  tabBarHolder.layer.shadowRadius = 14;
+  tabBarHolder.layer.shadowOpacity = 0.08;
+  tabBarHolder.layer.shadowColor = [UIColor blackColor].CGColor;
+  tabBarHolder.layer.shadowOffset = CGSizeZero;
   [self.view addSubview:tabBarHolder];
 
   UITabBar *tabBar = [[UITabBar alloc] init];
   self.tabBar = tabBar;
-  tabBar.layer.shadowRadius = 14;
-  tabBar.layer.shadowOpacity = 0.08;
-  tabBar.layer.shadowColor = [UIColor blackColor].CGColor;
-  tabBar.layer.shadowOffset = CGSizeZero;
   tabBar.translatesAutoresizingMaskIntoConstraints = NO;
   tabBar.delegate = self;
   [tabBarHolder addSubview:tabBar];
