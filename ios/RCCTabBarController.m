@@ -86,41 +86,39 @@
 
   UITabBar *tabBar = [[UITabBar alloc] init];
   self.tabBar = tabBar;
+  tabBar.layer.shadowRadius = 14;
+  tabBar.layer.shadowOpacity = 0.08;
+  tabBar.layer.shadowColor = [UIColor blackColor].CGColor;
+  tabBar.layer.shadowOffset = CGSizeZero;
   tabBar.translatesAutoresizingMaskIntoConstraints = NO;
-  self.tabBar.delegate = self;
+  tabBar.delegate = self;
   [tabBarHolder addSubview:tabBar];
 
-  UIView *topLine = [[UIView alloc] init];
-  topLine.translatesAutoresizingMaskIntoConstraints = NO;
-  topLine.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
-  [tabBarHolder addSubview:topLine];
+  UIImageView *centerTabView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_circle"]];
+  centerTabView.translatesAutoresizingMaskIntoConstraints = NO;
+  centerTabView.contentMode = UIViewContentModeBottom;
+  [tabBar addSubview:centerTabView];
 
   NSDictionary *views = @{
           @"view" : self.view,
           @"holder" : holder,
-          @"topLine" : topLine,
 		  @"tabBarHolder" : tabBarHolder,
+		  @"centerTabView" : centerTabView,
           @"tabBar" : tabBar,
   };
 
   NSDictionary *tabsStyle = props[@"style"];
-  NSNumber *tabBarHeight = tabsStyle[@"tabBarHeight"];
 
   NSMutableDictionary *metrics = @{}.mutableCopy;
 
   NSString *verticalFormat;
-  if (tabBarHeight) {
-	  metrics[@"tabBarHeight"] = tabBarHeight;
-	  verticalFormat = @"V:|-0-[tabBar(==tabBarHeight)]";
-  }
-  else {
-	  verticalFormat = @"V:|-0-[tabBar]-0-|";
-  }
+  metrics[@"tabBarHeight"] = self.tabBarHeight = @51;
+  verticalFormat = @"V:|-0-[tabBar(==tabBarHeight)]";
 
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tabBar]-0-|" options:nil metrics:metrics views:views]];
-  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[topLine]-0-|" options:nil metrics:metrics views:views]];
+  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[centerTabView]-0-|" options:nil metrics:metrics views:views]];
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalFormat options:nil metrics:metrics views:views]];
-  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[topLine(1)]" options:nil metrics:metrics views:views]];
+  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[centerTabView]-0-|" options:nil metrics:metrics views:views]];
 
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[holder]-0-|" options:nil metrics:metrics views:views]];
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tabBarHolder]-0-|" options:nil metrics:metrics views:views]];
@@ -171,21 +169,11 @@
       self.tabBar.translucent = [tabBarTranslucent boolValue];
     }
 
-    NSString *tabBarHideShadow = tabsStyle[@"tabBarHideShadow"];
-    if (tabBarHideShadow)
-    {
-      self.tabBar.clipsToBounds = [tabBarHideShadow boolValue];
+    if (!self.tabBarHeightConstraint) {
+      self.tabBarHeightConstraint = [NSLayoutConstraint constraintWithItem:tabBarHolder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+      [NSLayoutConstraint activateConstraints:@[self.tabBarHeightConstraint]];
     }
-
-    if (tabBarHeight) {
-	  self.tabBarHeight = tabBarHeight;
-
-      if (!self.tabBarHeightConstraint) {
-        self.tabBarHeightConstraint = [NSLayoutConstraint constraintWithItem:tabBarHolder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
-        [NSLayoutConstraint activateConstraints:@[self.tabBarHeightConstraint]];
-      }
-      self.tabBarHeightConstraint.constant = tabBarHeight.floatValue;
-    }
+    self.tabBarHeightConstraint.constant = self.tabBarHeight.floatValue;
   }
   
   NSMutableArray *viewControllers = [NSMutableArray array];
@@ -261,7 +249,7 @@
       }
 
       [tabBarItem setTitleTextAttributes:selectedAttributes forState:UIControlStateSelected];
-	  [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -5)];
+	  [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -3)];
 
       [tabBarItems addObject:tabBarItem];
     }
@@ -270,15 +258,6 @@
   }
 
   self.tabBar.items = tabBarItems.copy;
-
-  NSUInteger leni = self.tabBar.items.count;
-  CGFloat tabWidth = [UIScreen mainScreen].bounds.size.width / leni;
-  for (NSUInteger i = 0; i < leni; ++i) {
-	  CGFloat x = (i + 1) * tabWidth;
-	  UIView *view = [[UIView alloc] initWithFrame:CGRectMake(x, 10, 0.5, 40)];
-	  view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
-	  [self.tabBar insertSubview:view atIndex:leni - i];
-  }
 
   // replace the tabs
   self.viewControllers = viewControllers.copy;
