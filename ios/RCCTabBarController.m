@@ -249,7 +249,7 @@
       }
 
       [tabBarItem setTitleTextAttributes:selectedAttributes forState:UIControlStateSelected];
-	  [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -5)];
+	  [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -3)];
 
       [tabBarItems addObject:tabBarItem];
     }
