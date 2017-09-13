@@ -1,6 +1,5 @@
 package com.reactnativenavigation.views;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.animation.Animation;
@@ -20,7 +19,6 @@ public class BottomTabs extends AHBottomNavigation {
     public BottomTabs(Context context) {
         super(context);
 
-        setForceTint(true);
         setId(ViewUtils.generateViewId());
         setStyle();
         setFontFamily();
@@ -37,7 +35,7 @@ public class BottomTabs extends AHBottomNavigation {
 
     public void setStyleFromScreen(StyleParams params) {
         if (params.bottomTabsColor.hasColor()) {
-            setBackgroundColor(params.bottomTabsColor);
+            setDefaultBackgroundColor(params.bottomTabsColor.getColor());
         }
         if (params.bottomTabsButtonColor.hasColor()) {
             setInactiveColor(params.bottomTabsButtonColor.getColor());
@@ -105,20 +103,13 @@ public class BottomTabs extends AHBottomNavigation {
         }
     }
 
-    private void setBackgroundColor(StyleParams.Color bottomTabsColor) {
-        if (bottomTabsColor.hasColor()) {
-            setDefaultBackgroundColor(bottomTabsColor.getColor());
-        } else {
-            setDefaultBackgroundColor(Color.WHITE);
-        }
-    }
-
     private void setVisibility(boolean bottomTabsHidden) {
         setVisibility(bottomTabsHidden ? GONE : VISIBLE);
     }
 
     private void setStyle() {
 		setNavigationBarHeight(AppStyle.appStyle.bottomTabsTabBarHeight);
+		setTranslucentNavigationEnabled(true);
 
 		if (AppStyle.appStyle.bottomTabFontSize > 0) {
 			setTitleTextSizeInSp(AppStyle.appStyle.bottomTabFontSize, AppStyle.appStyle.bottomTabFontSize);

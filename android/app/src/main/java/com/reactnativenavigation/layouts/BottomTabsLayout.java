@@ -11,6 +11,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.reactnativenavigation.NavigationApplication;
+import com.reactnativenavigation.R;
 import com.reactnativenavigation.events.EventBus;
 import com.reactnativenavigation.events.ScreenChangedEvent;
 import com.reactnativenavigation.params.ActivityParams;
@@ -109,6 +110,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
     private LayoutParams createScreenLayoutParams(ScreenParams params) {
         LayoutParams lp = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
         if (params.styleParams.drawScreenAboveBottomTabs) {
+			lp.bottomMargin = (int) getResources().getDimension(R.dimen.overlap);
             lp.addRule(RelativeLayout.ABOVE, bottomTabs.getId());
         }
         return lp;
