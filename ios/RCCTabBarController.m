@@ -125,7 +125,9 @@
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[holder]-0-[tabBarHolder]-0-|" options:nil metrics:metrics views:views]];
 
   self.tabBar.translucent = YES; // default
-  
+  self.tabBar.shadowImage = [[UIImage alloc] init];
+  self.tabBar.backgroundImage = [[UIImage alloc] init];
+
   UIColor *buttonColor = nil;
   UIColor *labelColor = nil;
   UIColor *selectedLabelColor = nil;
