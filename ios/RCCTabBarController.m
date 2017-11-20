@@ -96,16 +96,10 @@ static const int kTabBarHeight = 51;
   tabBar.delegate = self;
   [tabBarHolder addSubview:tabBar];
 
-  UIImageView *centerTabView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_circle"]];
-  centerTabView.translatesAutoresizingMaskIntoConstraints = NO;
-  centerTabView.contentMode = UIViewContentModeBottom;
-  [tabBar addSubview:centerTabView];
-
   NSDictionary *views = @{
           @"view" : self.view,
           @"holder" : holder,
 		  @"tabBarHolder" : tabBarHolder,
-		  @"centerTabView" : centerTabView,
           @"tabBar" : tabBar,
   };
 
@@ -118,9 +112,7 @@ static const int kTabBarHeight = 51;
   verticalFormat = @"V:|[tabBar]|";
 
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tabBar]-0-|" options:nil metrics:metrics views:views]];
-  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[centerTabView]-0-|" options:nil metrics:metrics views:views]];
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalFormat options:nil metrics:metrics views:views]];
-  [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-24)-[centerTabView]" options:nil metrics:metrics views:views]];
 
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[holder]-0-|" options:nil metrics:metrics views:views]];
   [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tabBarHolder]-0-|" options:nil metrics:metrics views:views]];
