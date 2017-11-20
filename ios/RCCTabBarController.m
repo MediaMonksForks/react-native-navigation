@@ -449,10 +449,10 @@ static const int kTabBarHeight = 51;
 
   _selectedViewController = selectedViewController;
 
-  if (![oldController isEqual:selectedViewController])
-  {
     [self shouldSelectViewController:selectedViewController shouldSendJsEvent:shouldSendJsEvent];
 
+  if (![oldController isEqual:selectedViewController])
+  {
     selectedViewController.view.frame = oldController.view.bounds;
     [self addChildViewController:selectedViewController];
     [oldController willMoveToParentViewController:nil];
