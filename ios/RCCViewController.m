@@ -11,6 +11,7 @@
 #import "RCTHelpers.h"
 #import "RCCTitleViewHelper.h"
 #import "RCCCustomTitleView.h"
+#import "UINavigationBar+RCCNavigationBar.h"
 
 
 NSString* const RCCViewControllerCancelReactTouchesNotification = @"RCCViewControllerCancelReactTouchesNotification";
@@ -202,6 +203,8 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   [super viewDidAppear:animated];
   [self sendScreenChangedEvent:@"didAppear"];
   [self.navigationController.view layoutSubviews];
+
+	[self manageNavigationBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -210,6 +213,21 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   [self sendScreenChangedEvent:@"willAppear"];
   [self setStyleOnAppear];
   self.navigationController.interactivePopGestureRecognizer.delegate = self;
+
+	[self manageNavigationBar];
+}
+
+- (void)manageNavigationBar
+{
+	if (@available(iOS 11, *)) {
+		self.navigationController.navigationBar.prefersLargeTitles = self.navigationController.childViewControllers.count == 1;
+		self.navigationController.navigationBar.largeTitleTextAttributes = @{
+				NSForegroundColorAttributeName : [UIColor whiteColor],
+				NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
+		};
+	} else {
+		[self.navigationController.navigationBar setHeight:50];
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated
