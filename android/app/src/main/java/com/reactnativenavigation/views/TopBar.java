@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -88,6 +89,9 @@ public class TopBar extends AppBarLayout {
         }
         if (styleParams.topBarTransparent) {
             setTransparent();
+        } else {
+            setMinimumHeight(180);
+            setGravity(Gravity.BOTTOM);
         }
         titleBar.setStyle(styleParams);
         setTopTabsStyle(styleParams);
