@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -89,8 +90,10 @@ public class TopBar extends AppBarLayout {
         }
         if (styleParams.topBarTransparent) {
             setTransparent();
-        } else {
-            setMinimumHeight(180);
+        }
+        if (styleParams.titleBarHeight > -1) {
+            int navBarHeight = (int) TypedValue.applyDimension(2, styleParams.titleBarHeight, getResources().getDisplayMetrics());
+            setMinimumHeight(navBarHeight);
             setGravity(Gravity.BOTTOM);
         }
         titleBar.setStyle(styleParams);

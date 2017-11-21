@@ -83,6 +83,7 @@ public class StyleParams {
 
     public boolean titleBarHidden;
     public boolean titleBarHideOnScroll;
+    public int titleBarHeight;
     public boolean topBarTransparent;
     public boolean topBarTranslucent;
     public Color titleBarTitleColor;
@@ -90,6 +91,7 @@ public class StyleParams {
     public Color titleBarButtonColor;
     public Color titleBarDisabledButtonColor;
     public Font titleBarTitleFont;
+    public int titleBarTitleFontSize;
     public boolean titleBarTitleTextCentered;
     public boolean backButtonHidden;
 

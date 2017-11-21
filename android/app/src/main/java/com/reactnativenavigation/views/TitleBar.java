@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -74,6 +75,7 @@ public class TitleBar extends Toolbar {
         setVisibility(params.titleBarHidden);
         setTitleTextColor(params);
         setTitleTextFont(params);
+        setTitleTextSizeInSp(params);
         setSubtitleTextColor(params);
         colorOverflowButton(params);
         setBackground(params);
@@ -138,6 +140,19 @@ public class TitleBar extends Toolbar {
         View titleView = getTitleView();
         if (titleView instanceof TextView) {
             ((TextView) titleView).setTypeface(params.titleBarTitleFont.get());
+        }
+    }
+
+    protected void setTitleTextSizeInSp(StyleParams params) {
+        int titleBarTitleFontSize = params.titleBarTitleFontSize;
+        if (titleBarTitleFontSize == -1) {
+            return;
+        }
+        View titleView = getTitleView();
+        if (titleView instanceof TextView) {
+
+            float fontSize = TypedValue.applyDimension(2, titleBarTitleFontSize, getResources().getDisplayMetrics());
+            ((TextView) titleView).setTextSize(fontSize);
         }
     }
 

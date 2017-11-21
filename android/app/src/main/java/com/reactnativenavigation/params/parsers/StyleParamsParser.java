@@ -38,6 +38,7 @@ public class StyleParamsParser {
         }
         result.collapsingTopBarParams = new CollapsingTopBarParamsParser(params, result.titleBarHideOnScroll, result.drawScreenBelowTopBar).parse();
         result.titleBarHidden = getBoolean("titleBarHidden", getDefaultTopBarHidden());
+        result.titleBarHeight = getInt("titleBarHeight", getDefaultTopBarHeight());
         result.topBarElevationShadowEnabled = getBoolean("topBarElevationShadowEnabled", getDefaultTopBarElevationShadowEnabled());
         result.titleBarTitleColor = getColor("titleBarTitleColor", getDefaultTitleBarColor());
         result.topBarTranslucent = getBoolean("topBarTranslucent", getDefaultTopBarTranslucent());
@@ -46,6 +47,7 @@ public class StyleParamsParser {
         result.titleBarButtonColor = getColor("titleBarButtonColor", getTitleBarButtonColor());
         result.titleBarDisabledButtonColor = getColor("titleBarDisabledButtonColor", getTitleBarDisabledButtonColor());
         result.titleBarTitleFont = getFont("titleBarTitleFontFamily", getDefaultTitleTextFontFamily());
+        result.titleBarTitleFontSize = getInt("titleBarTitleFontSize", getDefaultTitleBarFontSize());
         result.titleBarTitleTextCentered = getBoolean("titleBarTitleTextCentered", getDefaultTitleBarTextCentered());
         result.backButtonHidden = getBoolean("backButtonHidden", getDefaultBackButtonHidden());
         result.topTabsHidden = getBoolean("topTabsHidden", getDefaultTopTabsHidden());
@@ -97,18 +99,6 @@ public class StyleParamsParser {
         result.orientation = Orientation.auto;
         result.bottomTabFontFamily = new StyleParams.Font();
         return result;
-    }
-
-    private StyleParams.Color getDefaultContextualMenuStatusBarColor() {
-        return new StyleParams.Color(Color.parseColor("#7c7c7c"));
-    }
-
-    private StyleParams.Color getDefaultContextualMenuBackgroundColor() {
-        return new StyleParams.Color(Color.WHITE);
-    }
-
-    private StyleParams.Color getDefaultContextualMenuButtonsColor() {
-        return new StyleParams.Color(Color.parseColor("#757575"));
     }
 
     private boolean getDefaultDrawScreenAboveBottomTabs() {
@@ -219,6 +209,10 @@ public class StyleParamsParser {
         return AppStyle.appStyle != null && AppStyle.appStyle.topBarTransparent;
     }
 
+    private int getDefaultTopBarHeight() {
+        return AppStyle.appStyle == null ? -1 : AppStyle.appStyle.titleBarHeight;
+    }
+
     private boolean getDefaultTopBarElevationShadowEnabled() {
         return AppStyle.appStyle == null || AppStyle.appStyle.topBarElevationShadowEnabled;
     }
@@ -249,6 +243,10 @@ public class StyleParamsParser {
 
     private StyleParams.Font getDefaultTitleTextFontFamily() {
         return AppStyle.appStyle == null ? new StyleParams.Font() : AppStyle.appStyle.titleBarTitleFont;
+    }
+
+    private int getDefaultTitleBarFontSize() {
+        return AppStyle.appStyle == null ? -1 : AppStyle.appStyle.titleBarTitleFontSize;
     }
 
     private boolean getDefaultTitleBarTextCentered() {
