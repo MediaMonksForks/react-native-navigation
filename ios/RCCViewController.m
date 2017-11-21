@@ -100,7 +100,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
       ((RCCViewController*)controller).controllerId = componentId;
     }
   }
-  
+
   return controller;
 }
 
@@ -168,6 +168,13 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   self.view = nil;
 }
 
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+
+	[self.navigationController.navigationBar setHeight:70];
+}
+
 -(void)onRNReload
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -202,19 +209,17 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 {
   [super viewDidAppear:animated];
   [self sendScreenChangedEvent:@"didAppear"];
-  [self.navigationController.view layoutSubviews];
-
 	[self manageNavigationBar];
+  [self.navigationController.view layoutSubviews];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
   [super viewWillAppear:animated];
   [self sendScreenChangedEvent:@"willAppear"];
+	[self manageNavigationBar];
   [self setStyleOnAppear];
   self.navigationController.interactivePopGestureRecognizer.delegate = self;
-
-	[self manageNavigationBar];
 }
 
 - (void)manageNavigationBar
@@ -226,7 +231,10 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 				NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
 		};
 	} else {
-		[self.navigationController.navigationBar setHeight:50];
+		int navBarHeight = 70;
+		[self.navigationController.navigationBar setHeight:navBarHeight];
+		CGRect frame = self.navigationController.navigationBar.frame;
+		[self.navigationController.navigationBar setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, navBarHeight)];
 	}
 }
 
@@ -280,21 +288,18 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     
   } else {
     viewController.navigationController.navigationBar.barTintColor = [UIColor
-            colorWithRed:11.f / 255.f
-            green:35.f / 255.f
-            blue:67.f / 255.f
+            colorWithRed:0.f / 255.f
+            green:125.f / 255.f
+            blue:195.f / 255.f
             alpha:1];
   }
   
-  NSMutableDictionary *titleTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarText" baseFont:[UIFont boldSystemFontOfSize:17]];
-  if (!titleTextAttributes[NSForegroundColorAttributeName]) titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-  [self.navigationController.navigationBar setTitleTextAttributes:titleTextAttributes];
-  
   if (self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[RCCTitleView class]]) {
-    
+
     RCCTitleView *titleView = (RCCTitleView *)self.navigationItem.titleView;
-    RCCTitleViewHelper *helper = [[RCCTitleViewHelper alloc] init:viewController navigationController:viewController.navigationController title:titleView.titleLabel.text subtitle:titleView.subtitleLabel.text titleImageData:nil isSetSubtitle:NO];
-    [helper setup:self.navigatorStyle];
+	  [titleView sizeToFit];
+//    RCCTitleViewHelper *helper = [[RCCTitleViewHelper alloc] init:viewController navigationController:viewController.navigationController title:titleView.titleLabel.text subtitle:titleView.subtitleLabel.text titleImageData:nil isSetSubtitle:NO];
+//    [helper setup:self.navigatorStyle];
   }
   
   NSMutableDictionary *navButtonTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarButton"];

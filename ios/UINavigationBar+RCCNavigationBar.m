@@ -20,11 +20,17 @@ static char const *const heightKey = "UINavigationBar+RCCNavigationBar.Height";
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
+	CGSize cgSize = [super sizeThatFits:size];
 	if (self.height) {
-		return CGSizeMake(self.superview.bounds.size.width, self.height.floatValue);
+		return CGSizeMake(cgSize.width, self.height.floatValue);
 	} else {
-		return [super sizeThatFits:size];
+		return cgSize;
 	}
+}
+
+- (UIBarPosition)positionForBar:(id<UIBarPositioning>)bar
+{
+	return UIBarPositionTopAttached;
 }
 
 @end

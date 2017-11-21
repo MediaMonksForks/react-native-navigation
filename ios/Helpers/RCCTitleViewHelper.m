@@ -74,15 +74,8 @@ navigationController:(UINavigationController*)navigationController
     self.titleView = [[RCCTitleView alloc] initWithFrame:navigationBarBounds];
     self.titleView.backgroundColor = [UIColor clearColor];
     self.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    self.titleView.clipsToBounds = YES;
-    
-    self.viewController.navigationItem.title = self.title;
-    
-    if ([self isTitleOnly]) {
-        self.viewController.navigationItem.titleView = nil;
-        return;
-    }
-    
+    self.titleView.clipsToBounds = NO;
+
     if ([self isTitleImage])
     {
         [self setupTitleImage];
@@ -102,12 +95,6 @@ navigationController:(UINavigationController*)navigationController
     [self centerTitleView:navigationBarBounds titleLabel:self.titleView.titleLabel subtitleLabel:self.titleView.subtitleLabel];
     
     self.viewController.navigationItem.titleView = self.titleView;
-}
-
-
--(BOOL)isTitleOnly
-{
-    return self.title && !self.subtitle && !self.titleImageData;
 }
 
 
@@ -186,7 +173,7 @@ navigationController:(UINavigationController*)navigationController
 
     id fontSize = style[@"navBarTitleFontSize"];
     CGFloat fontSizeFloat = [RCTConvert CGFloat:fontSize ?: @25];
-	UIFont *titleFont = [UIFont boldSystemFontOfSize:fontSizeFloat];
+	UIFont *titleFont = [UIFont fontWithName:@"NeueHaasUnicaPro-Medium" size:fontSizeFloat];
 
     titleLabel.font = titleFont;
     
@@ -208,7 +195,9 @@ navigationController:(UINavigationController*)navigationController
     {
         UIColor *color = navBarTextColor != (id)[NSNull null] ? [RCTConvert UIColor:navBarTextColor] : nil;
         titleLabel.textColor = color;
-    }
+    } else {
+		titleLabel.textColor = [UIColor whiteColor];
+	}
     
     [self.titleView addSubview:titleLabel];
     
