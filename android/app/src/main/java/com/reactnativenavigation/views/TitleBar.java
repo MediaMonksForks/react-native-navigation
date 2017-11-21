@@ -101,7 +101,8 @@ public class TitleBar extends Toolbar {
                 if (params.titleBarTitleTextCentered) {
                     titleView.setX(ViewUtils.getScreenWidth() / 2 - titleView.getWidth() / 2);
                 }
-                
+                float yOffset = TypedValue.applyDimension(2, -1, getResources().getDisplayMetrics());
+                titleView.setY(yOffset);
             }
         });
     }
