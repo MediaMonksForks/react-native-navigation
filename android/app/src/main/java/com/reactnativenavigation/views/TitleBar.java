@@ -16,6 +16,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
+import com.reactnativenavigation.R;
 import com.reactnativenavigation.params.AppStyle;
 import com.reactnativenavigation.params.BaseScreenParams;
 import com.reactnativenavigation.params.BaseTitleBarButtonParams;
@@ -209,6 +210,8 @@ public class TitleBar extends Toolbar {
         
         if (leftButtonParams.hasCustomIcon()) {
             setNavigationIcon(leftButtonParams.icon);
+        } else if (leftButtonParams.isBackButton()) {
+            setNavigationIcon(R.drawable.back);
         } else {
             setNavigationIcon(leftButton);
         }
