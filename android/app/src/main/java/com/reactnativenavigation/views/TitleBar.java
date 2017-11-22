@@ -3,12 +3,10 @@ package com.reactnativenavigation.views;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -83,7 +81,6 @@ public class TitleBar extends Toolbar {
         setSubtitleTextColor(params);
         colorOverflowButton(params);
         setBackground(params);
-        centerTitle(params);
         
         if (leftButton != null) {
             leftButton.setVisible(!params.backButtonHidden);
@@ -92,23 +89,6 @@ public class TitleBar extends Toolbar {
     
     public void setVisibility(boolean titleBarHidden) {
         setVisibility(titleBarHidden ? GONE : VISIBLE);
-    }
-    
-    private void centerTitle(final StyleParams params) {
-        final View titleView = getTitleView();
-        if (titleView == null) {
-            return;
-        }
-        ViewUtils.runOnPreDraw(titleView, new Runnable() {
-            @Override
-            public void run() {
-                if (params.titleBarTitleTextCentered) {
-                    titleView.setX(ViewUtils.getScreenWidth() / 2 - titleView.getWidth() / 2);
-                }
-                float yOffset = TypedValue.applyDimension(2, 7.5f, getResources().getDisplayMetrics());
-                titleView.setY(yOffset);
-            }
-        });
     }
     
     private void colorOverflowButton(StyleParams params) {
