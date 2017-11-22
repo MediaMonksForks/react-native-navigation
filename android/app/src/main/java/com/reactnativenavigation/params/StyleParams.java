@@ -51,8 +51,10 @@ public class StyleParams {
 
     public static class Font {
         private Typeface typeface;
+        private String fontName;
 
         public Font(String font) {
+            fontName = font;
             typeface = new TypefaceLoader(font).getTypeFace();
         }
 
@@ -68,6 +70,10 @@ public class StyleParams {
                 throw new RuntimeException("Font undefined");
             }
             return typeface;
+        }
+
+        public String getFontName() {
+            return fontName;
         }
     }
 
