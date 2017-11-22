@@ -82,9 +82,29 @@ public class TitleBar extends Toolbar {
         colorOverflowButton(params);
         setBackground(params);
         
+        final View titleBar = this;
+        ViewUtils.runOnPreDraw(titleBar, new Runnable() {
+            @Override
+            public void run() {
+                float yOffset = TypedValue.applyDimension(2, -5f, getResources().getDisplayMetrics());
+                titleBar.setY(yOffset);
+
+                if (leftButton != null) {
+                    float xOffset = TypedValue.applyDimension(2, 48f, getResources().getDisplayMetrics());
+                    View titleView = getTitleView();
+                    if (titleView != null) {
+                        titleView.setX(xOffset);
+                    }
+                }
+            }
+        });
+
         if (leftButton != null) {
             leftButton.setVisible(!params.backButtonHidden);
         }
+
+        float padding = TypedValue.applyDimension(2, 20, getResources().getDisplayMetrics());
+        setContentInsetsAbsolute((int) padding, (int) padding);
     }
     
     public void setVisibility(boolean titleBarHidden) {
