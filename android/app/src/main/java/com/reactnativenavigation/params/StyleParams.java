@@ -51,8 +51,10 @@ public class StyleParams {
 
     public static class Font {
         private Typeface typeface;
+        private String fontName;
 
         public Font(String font) {
+            fontName = font;
             typeface = new TypefaceLoader(font).getTypeFace();
         }
 
@@ -69,6 +71,10 @@ public class StyleParams {
             }
             return typeface;
         }
+
+        public String getFontName() {
+            return fontName;
+        }
     }
 
     public Orientation orientation;
@@ -83,6 +89,7 @@ public class StyleParams {
 
     public boolean titleBarHidden;
     public boolean titleBarHideOnScroll;
+    public int titleBarHeight;
     public boolean topBarTransparent;
     public boolean topBarTranslucent;
     public Color titleBarTitleColor;
@@ -90,6 +97,7 @@ public class StyleParams {
     public Color titleBarButtonColor;
     public Color titleBarDisabledButtonColor;
     public Font titleBarTitleFont;
+    public int titleBarTitleFontSize;
     public boolean titleBarTitleTextCentered;
     public boolean backButtonHidden;
 
