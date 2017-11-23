@@ -159,7 +159,7 @@ public class TitleBar extends Toolbar {
         }
         View titleView = getTitleView();
         if (titleView instanceof TextView) {
-            float fontSize = TypedValue.applyDimension(2, titleBarTitleFontSize, getResources().getDisplayMetrics());
+            float fontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, titleBarTitleFontSize * 0.75f, getResources().getDisplayMetrics());
             ((TextView) titleView).setTextSize(fontSize);
         }
     }
