@@ -174,6 +174,7 @@ static const int kTabBarHeight = 51;
   
   NSMutableArray *viewControllers = [NSMutableArray array];
   NSMutableArray *tabBarItems = [NSMutableArray array];
+  NSMutableArray *tabBarScreenIDs = [NSMutableArray array];
 
   // go over all the tab bar items
   for (NSDictionary *tabItemLayout in children)
@@ -192,9 +193,15 @@ static const int kTabBarHeight = 51;
       if ([tabItemLayout[@"children"] count] < 1) continue;
       NSDictionary *childLayout = tabItemLayout[@"children"][0];
       viewController = [RCCViewController controllerWithLayout:childLayout globalProps:globalProps bridge:bridge];
+      [tabBarScreenIDs addObject:tabItemLayout[@"props"][@"screen"]];
     } else {
-      NSDictionary *childLayout = tabItemLayout;
-      viewController = [RCCViewController controllerWithLayout:childLayout globalProps:globalProps bridge:bridge];
+      NSUInteger index = [tabBarScreenIDs indexOfObject:tabItemLayout[@"props"][@"component"]];
+      if (index == NSNotFound) {
+        NSDictionary *childLayout = tabItemLayout;
+        viewController = [RCCViewController controllerWithLayout:childLayout globalProps:globalProps bridge:bridge];
+      } else {
+        viewController = viewControllers[index];
+      }
     }
     if (!viewController) continue;
 
