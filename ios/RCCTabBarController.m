@@ -304,10 +304,9 @@ static const int kTabBarHeight = 51;
 	if (!self.tabBarHeight)
 	{
 		CGFloat extraInset = 0;
-// Use when project structure is ready for it
-//        if ([self.view respondsToSelector:@selector(safeAreaInsets)]) {
-//            extraInset = self.view.safeAreaInsets.bottom;
-//        }
+        if ([self.view respondsToSelector:@selector(safeAreaInsets)]) {
+            extraInset = self.view.safeAreaInsets.bottom;
+        }
 		self.tabBarHeight = @(kTabBarHeight + extraInset);
 		self.tabBarHeightConstraint.constant = self.tabBarHeight.floatValue;
 	}

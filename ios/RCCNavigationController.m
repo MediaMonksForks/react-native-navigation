@@ -52,7 +52,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   if (!self) return nil;
   self.delegate = self;
   
-  self.navigationBar.translucent = YES; // default
+  self.navigationBar.translucent = NO; // default
 
 	UIImage *backImage = [[UIImage imageNamed:@"back"] imageWithAlignmentRectInsets:UIEdgeInsetsMake(0, 0, -13.5f, 0)];
 	[UINavigationBar appearance].backIndicatorImage = backImage.copy;
@@ -62,7 +62,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
 			NSForegroundColorAttributeName : [UIColor whiteColor],
 			NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
 	}];
-	[[UINavigationBar appearance] setTitleVerticalPositionAdjustment:-13.5f forBarMetrics:UIBarMetricsDefault];
+	[[UINavigationBar appearance] setTitleVerticalPositionAdjustment:-9 forBarMetrics:UIBarMetricsDefault];
 
 	[self processTitleView:viewController
                    props:props
@@ -439,16 +439,12 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
                   props:(NSDictionary*)props
                   style:(NSDictionary*)style
 {
-  BOOL isSetSubtitleBool = props[@"isSetSubtitle"] ? [props[@"isSetSubtitle"] boolValue] : NO;
-  RCCTitleViewHelper *titleViewHelper = [[RCCTitleViewHelper alloc] init:viewController
-                                                    navigationController:self
-                                                                   title:props[@"title"]
-                                                                subtitle:props[@"subtitle"]
-                                                          titleImageData:props[@"titleImage"]
-                                                           isSetSubtitle:isSetSubtitleBool];
   
-  [titleViewHelper setup:style];
-  
+  NSString *title = props[@"title"];
+  if (title)
+  {
+    viewController.title = title;
+  }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
