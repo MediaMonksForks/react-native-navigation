@@ -225,10 +225,11 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 - (void)manageNavigationBar
 {
 	if (@available(iOS 11, *)) {
-		self.navigationController.navigationBar.prefersLargeTitles = self.navigationController.childViewControllers.count == 1;
-		self.navigationController.navigationBar.largeTitleTextAttributes = @{
+		self.navigationController.navigationBar.prefersLargeTitles = NO;
+
+		self.navigationController.navigationBar.titleTextAttributes = @{
 				NSForegroundColorAttributeName : [UIColor whiteColor],
-				NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
+				NSFontAttributeName : [UIFont boldSystemFontOfSize:22],
 		};
 	} else {
 		int navBarHeight = 70;
@@ -279,19 +280,26 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     UIImage *image = [UIImage imageNamed: screenBackgroundImageName];
     viewController.view.layer.contents = (__bridge id _Nullable)(image.CGImage);
   }
-  
-  NSString *navBarBackgroundColor = self.navigatorStyle[@"navBarBackgroundColor"];
+
+	NSNumber *navBarTransparent = self.navigatorStyle[@"navBarTransparent"];
+	BOOL navBarTransparentBool = navBarTransparent ? [navBarTransparent boolValue] : NO;
+
+	NSString *navBarBackgroundColor = self.navigatorStyle[@"navBarBackgroundColor"];
   if (navBarBackgroundColor) {
     
     UIColor *color = navBarBackgroundColor != (id)[NSNull null] ? [RCTConvert UIColor:navBarBackgroundColor] : nil;
     viewController.navigationController.navigationBar.barTintColor = color;
     
-  } else {
-    viewController.navigationController.navigationBar.barTintColor = [UIColor
-            colorWithRed:0.f / 255.f
-            green:125.f / 255.f
-            blue:195.f / 255.f
-            alpha:1];
+  } else if (!navBarTransparentBool) {
+	  UIColor *color = [UIColor
+			  colorWithRed:0.f / 255.f
+			  green:125.f / 255.f
+			  blue:195.f / 255.f
+			  alpha:1];
+	  viewController.navigationController.navigationBar.translucent = NO;
+	  viewController.navigationController.navigationBar.backgroundColor = color;
+	  viewController.navigationController.view.backgroundColor = color;
+    viewController.navigationController.navigationBar.barTintColor = color;
   }
   
   if (self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[RCCTitleView class]]) {
@@ -434,9 +442,6 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
       self.originalNavBarImages = nil;
     }
   }
-  
-  NSNumber *navBarTransparent = self.navigatorStyle[@"navBarTransparent"];
-  BOOL navBarTransparentBool = navBarTransparent ? [navBarTransparent boolValue] : NO;
   
   void (^action)() = ^ {
     if (navBarTransparentBool)

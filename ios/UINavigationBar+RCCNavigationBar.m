@@ -11,6 +11,8 @@ static char const *const heightKey = "UINavigationBar+RCCNavigationBar.Height";
 - (void)setHeight:(CGFloat)height
 {
 	objc_setAssociatedObject(self, heightKey, @(height), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	[self sizeToFit];
+	[self setNeedsLayout];
 }
 
 - (NSNumber *)height
