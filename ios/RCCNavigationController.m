@@ -54,7 +54,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   
   self.navigationBar.translucent = NO; // default
 
-	UIImage *backImage = [[UIImage imageNamed:@"back"] imageWithAlignmentRectInsets:UIEdgeInsetsMake(0, 0, -13.5f, 0)];
+	UIImage *backImage = [[UIImage imageNamed:@"back"] imageWithAlignmentRectInsets:UIEdgeInsetsMake(0, 0, 4, 0)];
 	[UINavigationBar appearance].backIndicatorImage = backImage.copy;
   [UINavigationBar appearance].backIndicatorTransitionMaskImage = backImage.copy;
 
@@ -62,7 +62,6 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
 			NSForegroundColorAttributeName : [UIColor whiteColor],
 			NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
 	}];
-	[[UINavigationBar appearance] setTitleVerticalPositionAdjustment:-9 forBarMetrics:UIBarMetricsDefault];
 
 	[self processTitleView:viewController
                    props:props
@@ -422,15 +421,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   
   if ([side isEqualToString:@"right"])
   {
-	  UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	  spaceItem.width = 4;
-	  [barButtonItems insertObject:spaceItem atIndex:0];
-
 	  [viewController.navigationItem setRightBarButtonItems:barButtonItems animated:animated];
-	  [viewController.navigationItem.rightBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem *obj, NSUInteger idx, BOOL *stop)
-	  {
-		  [obj setBackgroundVerticalPositionAdjustment:-9 forBarMetrics:UIBarMetricsDefault];
-	  }];
 	}
 }
 

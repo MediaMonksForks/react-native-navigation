@@ -225,12 +225,11 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 - (void)manageNavigationBar
 {
 	if (@available(iOS 11, *)) {
-		BOOL largeTitle = self.navigationController.childViewControllers.count == 1 && self.presentingViewController == nil;
-		self.navigationController.navigationBar.prefersLargeTitles = largeTitle;
+		self.navigationController.navigationBar.prefersLargeTitles = NO;
 
-		self.navigationController.navigationBar.largeTitleTextAttributes = @{
+		self.navigationController.navigationBar.titleTextAttributes = @{
 				NSForegroundColorAttributeName : [UIColor whiteColor],
-				NSFontAttributeName : [UIFont boldSystemFontOfSize:25],
+				NSFontAttributeName : [UIFont boldSystemFontOfSize:22],
 		};
 	} else {
 		int navBarHeight = 70;
