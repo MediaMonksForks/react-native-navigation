@@ -148,6 +148,10 @@ function startTabBasedApp(params) {
   return platformSpecific.startTabBasedApp(params);
 }
 
+function switchToTab(params) {
+	return platformSpecific.switchToTab(params);
+}
+
 function startSingleScreenApp(params) {
   return platformSpecific.startSingleScreenApp(params);
 }
@@ -157,10 +161,6 @@ function updateRootScreen(params) {
 
 function updateDrawerToScreen(params) {
 	return platformSpecific.updateDrawerToScreen(params);
-}
-
-function updateDrawerToTab(params) {
-	return platformSpecific.updateDrawerToTab(params);
 }
 
 function setEventHandler(navigatorEventID, eventHandler) {
@@ -219,10 +219,10 @@ export default {
   showInAppNotification,
   dismissInAppNotification,
   startTabBasedApp,
+  switchToTab,
   startSingleScreenApp,
   updateRootScreen,
   updateDrawerToScreen,
-  updateDrawerToTab,
   addSplashScreen,
   removeSplashScreen,
   setEventHandler,

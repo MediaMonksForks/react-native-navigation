@@ -14,10 +14,6 @@ function updateDrawerToScreen(screenParams) {
 	NativeReactModule.updateDrawerToScreen(screenParams);
 }
 
-function updateDrawerToTab(screenParams) {
-	NativeReactModule.updateDrawerToTab(screenParams);
-}
-
 function addSplashScreen() {
 	NativeReactModule.addSplashScreen();
 }
@@ -230,7 +226,6 @@ module.exports = {
   disableOpenGesture,
   disableBackNavigation,
   updateDrawerToScreen,
-  updateDrawerToTab,
   addSplashScreen,
   removeSplashScreen,
   selectBottomTabByNavigatorId,

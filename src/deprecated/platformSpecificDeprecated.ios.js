@@ -164,7 +164,14 @@ function startTabBasedApp(params) {
   ControllerRegistry.registerController(controllerID, () => Controller);
   ControllerRegistry.setRootController(controllerID, params.animationType, params.passProps || {});
 
-  return { drawerID, drawerIDLeft, drawerIDRight };
+  return { tabsNavigatorID, drawerID, drawerIDLeft, drawerIDRight };
+}
+
+function switchToTab(params) {
+  const { tabsNavigatorID, tabIndex } = params;
+  Controllers.TabBarControllerIOS(tabsNavigatorID).switchTo({
+    tabIndex,
+  })
 }
 
 function startSingleScreenApp(params) {
@@ -370,63 +377,6 @@ function updateDrawerToScreen(params) {
   });
 
   savePassProps(params);
-
-  ControllerRegistry.registerController(controllerID, () => Controller);
-  Controllers.DrawerControllerIOS(drawerID).updateScreen(controllerID);
-}
-
-function updateDrawerToTab(params) {
-  if (!params.drawerID) {
-    console.error('updateDrawerToTab(params): params.drawerID is required');
-    return;
-  }
-
-  const drawerID = params.drawerID;
-
-  const controllerID = _.uniqueId('controllerID');
-	const tabsNavigatorID = controllerID + '_tabs';
-
-  let screen = {};
-  screen.screen = params.screen;
-  const navigatorID = controllerID + '_nav';
-  const screenInstanceID = _.uniqueId('screenInstanceID');
-  const {
-    navigatorStyle,
-    navigatorButtons,
-    navigatorOptions,
-    navigatorEventID,
-  } = _mergeScreenSpecificSettings(screen.screen, screenInstanceID, params);
-  screen.navigationParams = {
-    screenInstanceID,
-    navigatorEventID,
-    navigatorID,
-    navigatorButtons,
-    navigatorStyle,
-  };
-  _injectOptionsInParams(screen, navigatorOptions);
-
-  const Controller = Controllers.createClass({
-    render: function() {
-      return (
-        <NavigationControllerIOS
-          id={screen.navigationParams.navigatorID}
-          title={screen.title}
-          subtitle={screen.subtitle}
-          titleImage={screen.titleImage}
-          component={screen.screen}
-          passProps={{
-            navigatorID: screen.navigationParams.navigatorID,
-            screenInstanceID: screen.navigationParams.screenInstanceID,
-            navigatorEventID: screen.navigationParams.navigatorEventID
-          }}
-          style={screen.navigationParams.navigatorStyle}
-          leftButtons={screen.navigationParams.navigatorButtons.leftButtons}
-          rightButtons={screen.navigationParams.navigatorButtons.rightButtons}
-        />
-      );
-    }
-  });
-	savePassProps(params);
 
   ControllerRegistry.registerController(controllerID, () => Controller);
   Controllers.DrawerControllerIOS(drawerID).updateScreen(controllerID);
@@ -919,10 +869,10 @@ async function getCurrentlyVisibleScreenId() {
 
 export default {
   startTabBasedApp,
+  switchToTab,
   startSingleScreenApp,
   updateRootScreen,
   updateDrawerToScreen,
-  updateDrawerToTab,
   addSplashScreen,
   removeSplashScreen,
   navigatorPush,

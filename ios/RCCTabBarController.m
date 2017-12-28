@@ -320,13 +320,10 @@ static const int kTabBarHeight = 51;
     NSNumber *tabIndex = actionParams[@"tabIndex"];
     if (tabIndex)
     {
-      NSUInteger i = [tabIndex unsignedIntegerValue];
-      
-      if ([self.viewControllers count] > i)
-      {
-        viewController = self.viewControllers[i];
-      }
+      [self setSelectedIndex:tabIndex.unsignedIntegerValue];
+      return;
     }
+
     NSString *contentId = actionParams[@"contentId"];
     NSString *contentType = actionParams[@"contentType"];
     if (contentId && contentType)

@@ -207,24 +207,15 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
 
     void updateDrawerToScreen(ScreenParams params) {
 
-		if (!(layout instanceof SingleScreenLayout))
+		if (layout instanceof SingleScreenLayout)
 		{
-			return;
-		}
-
-		SingleScreenLayout screenLayout = (SingleScreenLayout) layout;
-		screenLayout.newStack(params);
-	}
-
-    void updateDrawerToTab(ActivityParams params) {
-
-		if (!(layout instanceof BottomTabsLayout))
+    		SingleScreenLayout screenLayout = (SingleScreenLayout) layout;
+    		screenLayout.newStack(params);
+		} else if (layout instanceof BottomTabsLayout)
 		{
-			return;
+            BottomTabsLayout tabsLayout = (BottomTabsLayout) layout;
+            tabsLayout.showScreen(params);
 		}
-
-		BottomTabsLayout tabsLayout = (BottomTabsLayout) layout;
-		tabsLayout.showScreen(params.selectedPath, params.screenParams);
 	}
 
     void push(ScreenParams params) {
