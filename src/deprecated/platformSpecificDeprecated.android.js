@@ -93,29 +93,6 @@ function updateDrawerToScreen(params) {
   newPlatformSpecific.updateDrawerToScreen(adapted)
 }
 
-function updateDrawerToTab(params) {
-  if (params.screen) {
-    const screen = {};
-    screen.screen = params.screen;
-    screen.navigatorButtons = params.navigatorButtons;
-
-    addNavigatorParams(screen);
-    addNavigatorButtons(screen);
-    addNavigatorOptions(screen);
-    addNavigationStyleParams(screen);
-    screen.passProps = params.passProps;
-
-    adaptTopTabs(screen, screen.navigatorID);
-    let adapted = adaptNavigationStyleToScreenStyle(screen);
-    adapted = adaptNavigationParams(adapted);
-    adapted.overrideBackPress = params.overrideBackPress;
-    adapted.screenId = params.screen;
-    params.screen = adapted;
-  }
-
-  newPlatformSpecific.updateDrawerToTab(params)
-}
-
 function addSplashScreen() {
   newPlatformSpecific.addSplashScreen();
 }
@@ -395,6 +372,10 @@ function startTabBasedApp(params) {
   if (params.sideMenu.right) ret.drawerIDRight = params.sideMenu.right.navigatorID;
 	ret.drawerID = ret.drawerIDLeft ? ret.drawerIDLeft : (ret.drawerIDRight ? ret.drawerIDRight : null);
   return ret;
+}
+
+function switchToTab(params) {
+  newPlatformSpecific.selectBottomTabByTabIndex(params.tabIndex);
 }
 
 function addTabIcon(tab) {
@@ -826,10 +807,10 @@ async function getCurrentlyVisibleScreenId() {
 
 export default {
   startTabBasedApp,
+  switchToTab,
   startSingleScreenApp,
   updateRootScreen,
   updateDrawerToScreen,
-  updateDrawerToTab,
   addSplashScreen,
   removeSplashScreen,
   navigatorPush,

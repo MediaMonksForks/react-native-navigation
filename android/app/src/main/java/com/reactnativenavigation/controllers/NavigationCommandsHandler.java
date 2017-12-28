@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.reactnativenavigation.NavigationApplication;
@@ -58,22 +57,6 @@ public class NavigationCommandsHandler {
 			public void run()
 			{
 				currentActivity.updateDrawerToScreen(ScreenParamsParser.parse(params));
-			}
-		});
-	}
-
-    public static void updateDrawerToTab(final Bundle params) {
-		final NavigationActivity currentActivity = NavigationActivity.currentActivity;
-		if (currentActivity == null) {
-			return;
-		}
-
-		NavigationApplication.instance.runOnMainThread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				currentActivity.updateDrawerToTab(ActivityParamsParser.parse(params));
 			}
 		});
 	}

@@ -539,18 +539,18 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         throw new ScreenStackNotFoundException("Stack " + navigatorId + " not found");
     }
 
-	public void showScreen(String screenId, ScreenParams screenParams)
+	public void showScreen(ScreenParams screenParams)
 	{
-		int tabIndex = this.getTabIndexForScreenId(screenId);
-
-		if (tabIndex == -1 && (extraScreenStack.empty() || !extraScreenStack.peek().getScreenParams().screenId.equals(screenId)))
+	    hideCurrentStack();
+		if (extraScreenStack.empty() || !extraScreenStack.peek().getScreenParams().screenId.equals(screenParams.screenId))
 		{
-			extraScreenStack.destroy();
+		    if (!extraScreenStack.empty()) {
+                extraScreenStack.destroy();
+            }
 			extraScreenStack.pushInitialScreen(screenParams, createScreenLayoutParams(screenParams));
-			showStackAndUpdateStyle(extraScreenStack);
 		}
-
-		this.selectBottomTabByTabIndex(tabIndex);
+        showNewStack(-1);
+		bottomTabs.setCurrentItem(-1, false);
 	}
 
 	private class ScreenStackNotFoundException extends RuntimeException {
