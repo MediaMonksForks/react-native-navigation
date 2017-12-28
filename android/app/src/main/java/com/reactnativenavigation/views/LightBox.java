@@ -41,7 +41,7 @@ public class LightBox extends Dialog implements DialogInterface.OnDismissListene
     private void createContent(final Context context, LightBoxParams params) {
         lightBox = new RelativeLayout(context);
         lightBox.setAlpha(0);
-        content = new ContentView(context, params.screenId, params.navigationParams);
+        content = new ContentView(context, params.screenId, params.navigationParams, null);
         content.setAlpha(0);
         content.setId(ViewUtils.generateViewId());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);

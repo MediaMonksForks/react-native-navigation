@@ -36,7 +36,7 @@ public class CollapsingTopBarReactHeader extends ContentView implements Collapsi
     }
 
     public CollapsingTopBarReactHeader(Context context, CollapsingTopBarParams params, NavigationParams navigationParams, ScrollListener scrollListener, Screen.OnDisplayListener onDisplayListener) {
-        super(context, params.reactViewId, navigationParams);
+        super(context, params.reactViewId, navigationParams, null);
         listener = scrollListener;
         this.onDisplayListener = onDisplayListener;
         ViewConfiguration vc = ViewConfiguration.get(context);

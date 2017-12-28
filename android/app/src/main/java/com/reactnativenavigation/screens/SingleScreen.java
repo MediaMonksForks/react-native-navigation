@@ -20,7 +20,7 @@ public class SingleScreen extends Screen {
 
     @Override
     protected void createContent() {
-        contentView = new ContentView(getContext(), screenParams.screenId, screenParams.navigationParams);
+        contentView = new ContentView(getContext(), screenParams.screenId, screenParams.navigationParams, screenParams.passProps);
         addView(contentView, 0, createLayoutParams());
     }
 

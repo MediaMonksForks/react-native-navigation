@@ -9,9 +9,7 @@ import com.reactnativenavigation.animation.PeekingAnimator;
 import com.reactnativenavigation.params.SlidingOverlayParams;
 import com.reactnativenavigation.params.SlidingOverlayParams.Position;
 import com.reactnativenavigation.screens.Screen;
-import com.reactnativenavigation.utils.ViewUtils;
 import com.reactnativenavigation.views.ContentView;
-import com.reactnativenavigation.views.utils.ViewMeasurer;
 
 public class SlidingOverlay {
 
@@ -111,7 +109,7 @@ public class SlidingOverlay {
         final RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.addRule(params.position == Position.Top ? RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-        final ContentView view = new ContentView(parent.getContext(), params.screenInstanceId, params.navigationParams);
+        final ContentView view = new ContentView(parent.getContext(), params.screenInstanceId, params.navigationParams, null);
         view.setViewMeasurer(new OverlayViewMeasurer(view));
         view.setLayoutParams(lp);
         view.setVisibility(View.INVISIBLE);

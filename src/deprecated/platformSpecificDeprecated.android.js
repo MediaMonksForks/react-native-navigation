@@ -89,6 +89,9 @@ function updateDrawerToScreen(params) {
   let adapted = adaptNavigationStyleToScreenStyle(params);
   adapted = adaptNavigationParams(adapted);
   adapted.overrideBackPress = params.overrideBackPress;
+  if (params.passProps) {
+    adapted.passProps = params.passProps;
+  }
 
   newPlatformSpecific.updateDrawerToScreen(adapted)
 }

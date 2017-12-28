@@ -19,6 +19,7 @@ public class BaseScreenParams {
     public StyleParams styleParams;
     public String fragmentCreatorClassName;
     public Bundle fragmentCreatorPassProps;
+    public Bundle passProps;
     public boolean animateScreenTransitions;
     public String animationType;
 
