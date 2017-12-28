@@ -415,6 +415,7 @@ function updateDrawerToTab(params) {
           titleImage={screen.titleImage}
           component={screen.screen}
           passProps={{
+            ...params.passProps,
             navigatorID: screen.navigationParams.navigatorID,
             screenInstanceID: screen.navigationParams.screenInstanceID,
             navigatorEventID: screen.navigationParams.navigatorEventID
