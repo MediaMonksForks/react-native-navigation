@@ -542,10 +542,13 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
 	public void showScreen(ScreenParams screenParams)
 	{
 	    hideCurrentStack();
-        if (!extraScreenStack.empty()) {
+	    if (!extraScreenStack.empty() && !extraScreenStack.peek().getScreenParams().screenId.equals(screenParams.screenId))
+        {
             extraScreenStack.destroy();
+            extraScreenStack.pushInitialScreen(screenParams, createScreenLayoutParams(screenParams));
+        } else if (extraScreenStack.empty()) {
+            extraScreenStack.pushInitialScreen(screenParams, createScreenLayoutParams(screenParams));
         }
-        extraScreenStack.pushInitialScreen(screenParams, createScreenLayoutParams(screenParams));
         showNewStack(-1);
 		bottomTabs.setCurrentItem(-1, false);
 	}
