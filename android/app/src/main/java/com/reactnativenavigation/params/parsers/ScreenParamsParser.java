@@ -22,6 +22,7 @@ public class ScreenParamsParser extends Parser {
     private static final String FRAGMENT_CREATOR_PASS_PROPS = "fragmentCreatorPassProps";
     private static final String OVERRIDE_BACK_PRESS = "overrideBackPress";
     private static final String ANIMATION_TYPE = "animationType";
+    private static final String PASSPROPS_KEY = "passProps";
 
     @SuppressWarnings("ConstantConditions")
     public static ScreenParams parse(Bundle params) {
@@ -43,6 +44,10 @@ public class ScreenParamsParser extends Parser {
         if (hasKey(params, FRAGMENT_CREATOR_CLASS_NAME)) {
             result.fragmentCreatorClassName = params.getString(FRAGMENT_CREATOR_CLASS_NAME);
             result.fragmentCreatorPassProps = params.getBundle(FRAGMENT_CREATOR_PASS_PROPS);
+        }
+
+        if (hasKey(params, PASSPROPS_KEY)) {
+            result.passProps = params.getBundle(PASSPROPS_KEY);
         }
 
         result.fabParams = ButtonParser.parseFab(params, result.navigationParams.navigatorEventId, result.navigationParams.screenInstanceId);

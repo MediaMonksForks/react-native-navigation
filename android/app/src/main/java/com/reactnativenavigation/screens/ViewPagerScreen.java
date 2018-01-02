@@ -88,7 +88,7 @@ public class ViewPagerScreen extends Screen {
     }
 
     protected ContentView createContentView(PageParams tab) {
-        return new ContentView(getContext(), tab.screenId, tab.navigationParams);
+        return new ContentView(getContext(), tab.screenId, tab.navigationParams, screenParams.passProps);
     }
 
     private void setupViewPager(TabLayout tabLayout) {

@@ -166,15 +166,14 @@ UIViewController *rightViewController = nil;
         NSDictionary *layout = actionParams[@"layout"];
         NSDictionary *passProps = actionParams[@"passProps"];
 
-		id controller = [RCCViewController controllerWithLayout:layout globalProps:passProps bridge:[[RCCManager sharedInstance] getBridge]];
-		if (controller == nil) {
-			return;
-		}
-
         if ([self.centerViewController isKindOfClass:[RCCTabBarController class]]) {
             RCCTabBarController *tabBarController = (RCCTabBarController *)self.centerViewController;
-            [tabBarController showScreen:(RCCNavigationController *)controller];
+            [tabBarController showScreenWithLayout:layout props:passProps];
         } else {
+            id controller = [RCCViewController controllerWithLayout:layout globalProps:passProps bridge:[[RCCManager sharedInstance] getBridge]];
+            if (controller == nil) {
+                return;
+            }
             self.centerViewController = controller;
         }
 

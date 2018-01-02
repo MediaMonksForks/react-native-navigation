@@ -530,23 +530,27 @@ static const int kTabBarHeight = 51;
   return selectedIndex;
 }
 
-- (void)showScreen:(RCCNavigationController *)controller
+- (void)showScreenWithLayout:(NSDictionary *)layout props:(NSDictionary *)props
 {
-  RCTRootView *rootView = (RCTRootView *)controller.viewControllers.firstObject.view;
-  NSString *newScreen = rootView.moduleName;
+  RCTRootView *currentView = (RCTRootView *) self.selectedViewController.childViewControllers.firstObject.view;
+  NSString *currentModuleName = currentView.moduleName;
 
-  NSInteger index = [self indexForScreen:newScreen];
+  NSString *newModuleName = layout[@"props"][@"component"];
 
-  if (index < 0) {
-	  NSMutableArray *tempControllers = self.viewControllers.mutableCopy;
-	  [tempControllers removeLastObject];
-	  [tempControllers addObject:controller];
-	  self.viewControllers = tempControllers.copy;
+  if (![currentModuleName isEqualToString:newModuleName]) {
 
-	  index = self.tabBar.items.count;
+      id controller = [RCCViewController controllerWithLayout:layout globalProps:props bridge:[[RCCManager sharedInstance] getBridge]];
+      if (controller == nil) {
+          return;
+      }
+
+      NSMutableArray *tempControllers = self.viewControllers.mutableCopy;
+      [tempControllers removeLastObject];
+      [tempControllers addObject:controller];
+      self.viewControllers = tempControllers.copy;
+
+      self.selectedIndex = self.tabBar.items.count;
   }
-
-  self.selectedIndex = (NSUInteger)index;
 }
 
 @end

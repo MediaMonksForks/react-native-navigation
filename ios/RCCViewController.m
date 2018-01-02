@@ -284,22 +284,16 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 	NSNumber *navBarTransparent = self.navigatorStyle[@"navBarTransparent"];
 	BOOL navBarTransparentBool = navBarTransparent ? [navBarTransparent boolValue] : NO;
 
-	NSString *navBarBackgroundColor = self.navigatorStyle[@"navBarBackgroundColor"];
-  if (navBarBackgroundColor) {
-    
-    UIColor *color = navBarBackgroundColor != (id)[NSNull null] ? [RCTConvert UIColor:navBarBackgroundColor] : nil;
-    viewController.navigationController.navigationBar.barTintColor = color;
-    
+	NSString *navBarBackgroundColorString = self.navigatorStyle[@"navBarBackgroundColor"];
+    UIColor *navBarBackgroundColor;
+  if (navBarBackgroundColorString) {
+      navBarBackgroundColor = navBarBackgroundColorString != (id)[NSNull null] ? [RCTConvert UIColor:navBarBackgroundColorString] : nil;
   } else if (!navBarTransparentBool) {
-	  UIColor *color = [UIColor
+      navBarBackgroundColor = [UIColor
 			  colorWithRed:0.f / 255.f
 			  green:125.f / 255.f
 			  blue:195.f / 255.f
 			  alpha:1];
-	  viewController.navigationController.navigationBar.translucent = NO;
-	  viewController.navigationController.navigationBar.backgroundColor = color;
-	  viewController.navigationController.view.backgroundColor = color;
-    viewController.navigationController.navigationBar.barTintColor = color;
   }
   
   if (self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[RCCTitleView class]]) {
@@ -444,41 +438,15 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   }
   
   void (^action)() = ^ {
-    if (navBarTransparentBool)
-    {
-      if (![viewController.navigationController.navigationBar viewWithTag:TRANSPARENT_NAVBAR_TAG])
-      {
-        [self storeOriginalNavBarImages];
-        
-        [viewController.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-        viewController.navigationController.navigationBar.shadowImage = [UIImage new];
-        UIView *transparentView = [[UIView alloc] initWithFrame:CGRectZero];
-        transparentView.tag = TRANSPARENT_NAVBAR_TAG;
-        [viewController.navigationController.navigationBar insertSubview:transparentView atIndex:0];
-      }
-    }
-    else
-    {
-      UIView *transparentView = [viewController.navigationController.navigationBar viewWithTag:TRANSPARENT_NAVBAR_TAG];
-      if (transparentView)
-      {
-        [transparentView removeFromSuperview];
-        [viewController.navigationController.navigationBar setBackgroundImage:self.originalNavBarImages[@"bgImage"] forBarMetrics:UIBarMetricsDefault];
-        viewController.navigationController.navigationBar.shadowImage = self.originalNavBarImages[@"shadowImage"];
-        self.originalNavBarImages = nil;
-      }
-    }
+      viewController.navigationController.navigationBar.barTintColor = navBarBackgroundColor;
+      viewController.navigationController.view.backgroundColor = navBarBackgroundColor;
   };
   
   if (!self.transitionCoordinator || self.transitionCoordinator.initiallyInteractive || !navBarTransparentBool || appeared) {
     action();
   } else {
-    UIView* backgroundView = [self.navigationController.navigationBar valueForKey:@"backgroundView"];
-    CGFloat originalAlpha = backgroundView.alpha;
-    backgroundView.alpha = navBarTransparentBool ? 0.0 : 1.0;
     [self.transitionCoordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
       action();
-      backgroundView.alpha = originalAlpha;
     }];
   }
   

@@ -24,7 +24,7 @@ public class CollapsingContentView extends ContentView implements CollapsingView
     private final ViewCollapser viewCollapser;
 
     public CollapsingContentView(Context context, String screenId, NavigationParams navigationParams) {
-        super(context, screenId, navigationParams);
+        super(context, screenId, navigationParams, null);
         viewCollapser = new ViewCollapser(this);
     }
 
