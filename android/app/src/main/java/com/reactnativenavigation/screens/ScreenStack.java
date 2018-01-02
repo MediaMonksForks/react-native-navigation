@@ -233,6 +233,10 @@ public class ScreenStack {
         return stack.peek();
     }
 
+    public Screen bottom() {
+        return stack.get(0);
+    }
+
     public boolean empty() {
 		return stack.empty();
 	}
