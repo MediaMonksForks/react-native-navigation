@@ -440,42 +440,13 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   void (^action)() = ^ {
       viewController.navigationController.navigationBar.barTintColor = navBarBackgroundColor;
       viewController.navigationController.view.backgroundColor = navBarBackgroundColor;
-
-      if (navBarTransparentBool)
-    {
-      if (![viewController.navigationController.navigationBar viewWithTag:TRANSPARENT_NAVBAR_TAG])
-      {
-        [self storeOriginalNavBarImages];
-        
-        [viewController.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-        viewController.navigationController.navigationBar.shadowImage = [UIImage new];
-        UIView *transparentView = [[UIView alloc] initWithFrame:CGRectZero];
-        transparentView.tag = TRANSPARENT_NAVBAR_TAG;
-        [viewController.navigationController.navigationBar insertSubview:transparentView atIndex:0];
-      }
-    }
-    else
-    {
-      UIView *transparentView = [viewController.navigationController.navigationBar viewWithTag:TRANSPARENT_NAVBAR_TAG];
-      if (transparentView)
-      {
-        [transparentView removeFromSuperview];
-        [viewController.navigationController.navigationBar setBackgroundImage:self.originalNavBarImages[@"bgImage"] forBarMetrics:UIBarMetricsDefault];
-        viewController.navigationController.navigationBar.shadowImage = self.originalNavBarImages[@"shadowImage"];
-        self.originalNavBarImages = nil;
-      }
-    }
   };
   
   if (!self.transitionCoordinator || self.transitionCoordinator.initiallyInteractive || !navBarTransparentBool || appeared) {
     action();
   } else {
-    UIView* backgroundView = [self.navigationController.navigationBar valueForKey:@"backgroundView"];
-    CGFloat originalAlpha = backgroundView.alpha;
-    backgroundView.alpha = navBarTransparentBool ? 0.0 : 1.0;
     [self.transitionCoordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
       action();
-      backgroundView.alpha = originalAlpha;
     }];
   }
   
