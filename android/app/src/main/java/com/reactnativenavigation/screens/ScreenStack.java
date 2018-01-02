@@ -422,17 +422,21 @@ public class ScreenStack {
 
     public void show() {
         isStackVisible = true;
-        stack.peek().setStyle();
-        stack.peek().setVisibility(View.VISIBLE);
-        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willAppear", stack.peek().getNavigatorEventId());
-        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didAppear", stack.peek().getNavigatorEventId());
+        if (!stack.empty()) {
+            stack.peek().setStyle();
+            stack.peek().setVisibility(View.VISIBLE);
+            NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willAppear", stack.peek().getNavigatorEventId());
+            NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didAppear", stack.peek().getNavigatorEventId());
+        }
     }
 
     public void hide() {
-        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willDisappear", stack.peek().getNavigatorEventId());
-        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didDisappear", stack.peek().getNavigatorEventId());
-        isStackVisible = false;
-        stack.peek().setVisibility(View.INVISIBLE);
+        if (!stack.empty()) {
+            NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willDisappear", stack.peek().getNavigatorEventId());
+            NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didDisappear", stack.peek().getNavigatorEventId());
+            isStackVisible = false;
+            stack.peek().setVisibility(View.INVISIBLE);
+        }
     }
 
     public String rootScreenId() {
