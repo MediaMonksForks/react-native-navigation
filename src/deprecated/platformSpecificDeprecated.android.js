@@ -611,6 +611,9 @@ function addNavigatorButtons(screen) {
           button.icon = icon.uri;
         }
       }
+      if (button.buttonColor) {
+        button.buttonColor = processColor(button.buttonColor);
+      }
     });
   }
 

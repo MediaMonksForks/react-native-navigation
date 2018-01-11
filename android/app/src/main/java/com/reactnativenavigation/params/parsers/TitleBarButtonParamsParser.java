@@ -25,7 +25,11 @@ public class TitleBarButtonParamsParser extends Parser {
         if (hasKey(bundle, "icon")) {
             result.icon = ImageLoader.loadImage(bundle.getString("icon"));
         }
-        result.color = getColor(bundle, "color", AppStyle.appStyle.titleBarButtonColor);
+        if (hasKey(bundle, "buttonColor")) {
+            result.color = getColor(bundle, "buttonColor", AppStyle.appStyle.titleBarButtonColor);
+        } else {
+            result.color = getColor(bundle, "color", AppStyle.appStyle.titleBarButtonColor);
+        }
         result.disabledColor =
                 getColor(bundle, "titleBarDisabledButtonColor", AppStyle.appStyle.titleBarDisabledButtonColor);
         result.showAsAction = parseShowAsAction(bundle.getString("showAsAction"));
