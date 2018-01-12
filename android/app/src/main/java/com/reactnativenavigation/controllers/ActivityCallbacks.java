@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class ActivityCallbacks {
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState, Bundle extras) {
 
     }
 

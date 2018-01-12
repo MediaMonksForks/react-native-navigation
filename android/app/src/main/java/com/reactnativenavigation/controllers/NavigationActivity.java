@@ -60,10 +60,13 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     private Layout layout;
     @Nullable private PermissionListener mPermissionListener;
 
+    static private Bundle _savedExtras;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!NavigationApplication.instance.isReactContextInitialized()) {
+            _savedExtras = getIntent().getExtras();
             NavigationApplication.instance.startReactContextOnceInBackgroundAndExecuteJS();
             return;
         }
@@ -73,7 +76,9 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
         setOrientation();
         createModalController();
         createLayout();
-        NavigationApplication.instance.getActivityCallbacks().onActivityCreated(this, savedInstanceState);
+        NavigationApplication.instance.getActivityCallbacks().onActivityCreated(this, savedInstanceState, _savedExtras);
+
+        _savedExtras = null;
     }
 
     private void setOrientation() {
