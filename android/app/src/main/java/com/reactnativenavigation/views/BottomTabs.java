@@ -2,6 +2,9 @@ package com.reactnativenavigation.views;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Outline;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
@@ -110,6 +113,11 @@ public class BottomTabs extends AHBottomNavigation {
     private void setStyle() {
 		setNavigationBarHeight(AppStyle.appStyle.bottomTabsTabBarHeight);
 		setTranslucentNavigationEnabled(true);
+		setOutlineProvider(new ViewOutlineProvider() {
+            @Override public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, -5, view.getWidth(), view.getHeight() + 5, 0);
+            }
+        });
 
 		if (AppStyle.appStyle.bottomTabFontSize > 0) {
 			setTitleTextSizeInSp(AppStyle.appStyle.bottomTabFontSize, AppStyle.appStyle.bottomTabFontSize);
