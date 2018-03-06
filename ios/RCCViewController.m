@@ -11,8 +11,6 @@
 #import "RCTHelpers.h"
 #import "RCCTitleViewHelper.h"
 #import "RCCCustomTitleView.h"
-#import "UINavigationBar+RCCNavigationBar.h"
-
 
 NSString* const RCCViewControllerCancelReactTouchesNotification = @"RCCViewControllerCancelReactTouchesNotification";
 
@@ -168,13 +166,6 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   self.view = nil;
 }
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-
-	[self.navigationController.navigationBar setHeight:70];
-}
-
 -(void)onRNReload
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -231,11 +222,6 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 				NSForegroundColorAttributeName : [UIColor whiteColor],
 				NSFontAttributeName : [UIFont boldSystemFontOfSize:22],
 		};
-	} else {
-		int navBarHeight = 70;
-		[self.navigationController.navigationBar setHeight:navBarHeight];
-		CGRect frame = self.navigationController.navigationBar.frame;
-		[self.navigationController.navigationBar setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, navBarHeight)];
 	}
 }
 

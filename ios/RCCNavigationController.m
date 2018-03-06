@@ -54,7 +54,7 @@ NSString const *CALLBACK_ASSOCIATED_ID = @"RCCNavigationController.CALLBACK_ASSO
   
   self.navigationBar.translucent = NO; // default
 
-	UIImage *backImage = [[UIImage imageNamed:@"back"] imageWithAlignmentRectInsets:UIEdgeInsetsMake(0, 0, 4, 0)];
+	UIImage *backImage = [UIImage imageNamed:@"back"];
 	[UINavigationBar appearance].backIndicatorImage = backImage.copy;
   [UINavigationBar appearance].backIndicatorTransitionMaskImage = backImage.copy;
 
