@@ -173,6 +173,7 @@ function navigatorPopToRoot(navigator, params) {
 
 function navigatorResetTo(navigatorID, params) {
   addNavigatorParams(params, {navigatorID});
+  addNavigatorOptions(params);
   addNavigatorButtons(params);
   addNavigationStyleParams(params);
 
