@@ -122,10 +122,17 @@ class Modal extends Dialog implements DialogInterface.OnDismissListener, ScreenS
         this.screenParams = screenParams;
         createContent();
         setAnimation(screenParams);
+        setSoftInputMode(screenParams);
         setStatusBarStyle(screenParams.styleParams);
         setNavigationBarStyle(screenParams.styleParams);
         setDrawUnderStatusBar(screenParams.styleParams);
     }
+
+	private void setSoftInputMode(ScreenParams screenParams){
+        Window window = getWindow();
+        if (window == null) return;
+		window.setSoftInputMode(screenParams.setSoftInputMode);
+	}
 
     private void setStatusBarStyle(StyleParams styleParams) {
         Window window = getWindow();

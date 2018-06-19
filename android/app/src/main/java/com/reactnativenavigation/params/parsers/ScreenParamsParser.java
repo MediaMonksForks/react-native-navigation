@@ -1,6 +1,8 @@
 package com.reactnativenavigation.params.parsers;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.WindowManager;
 import android.os.Bundle;
 
 import com.reactnativenavigation.params.AppStyle;
@@ -59,11 +61,27 @@ public class ScreenParamsParser extends Parser {
 
         result.animateScreenTransitions = new AnimationParser(params).parse();
         result.sharedElementsTransitions = getSharedElementsTransitions(params);
-		result.setSoftInputMode = params.getInt(SET_SOFT_INPUT_MODE);
+        result.setSoftInputMode = getSoftInputMode(params.getString(SET_SOFT_INPUT_MODE));
 
         result.animationType = params.getString(ANIMATION_TYPE, AppStyle.appStyle == null ? "" : AppStyle.appStyle.screenAnimationType);
 
         return result;
+    }
+
+    private static int getSoftInputMode(String softInput) {
+        if (softInput == null) return WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+        int softInputValue;
+        switch (softInput) {
+            case "SoftInputPan":
+                softInputValue = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+                break;
+            case "SoftInputResize":
+                softInputValue = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+                break;
+            default:
+                softInputValue = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+        }
+        return softInputValue;
     }
 
     private static List<String> getSharedElementsTransitions(Bundle params) {
