@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Window;
-import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
@@ -28,7 +27,6 @@ import com.reactnativenavigation.layouts.LayoutFactory;
 import com.reactnativenavigation.layouts.SingleScreenLayout;
 import com.reactnativenavigation.params.ActivityParams;
 import com.reactnativenavigation.params.AppStyle;
-import com.reactnativenavigation.params.ContextualMenuParams;
 import com.reactnativenavigation.params.FabParams;
 import com.reactnativenavigation.params.LightBoxParams;
 import com.reactnativenavigation.params.ScreenParams;
@@ -66,6 +64,7 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!NavigationApplication.instance.isReactContextInitialized()) {
+            IntentDataHandler.onResume(getIntent());
             _savedExtras = getIntent().getExtras();
             NavigationApplication.instance.startReactContextOnceInBackgroundAndExecuteJS();
             return;
@@ -132,6 +131,8 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        IntentDataHandler.onResume(getIntent());
+        setIntent(intent);
         getReactGateway().onNewIntent(intent);
         NavigationApplication.instance.getActivityCallbacks().onNewIntent(intent);
     }
