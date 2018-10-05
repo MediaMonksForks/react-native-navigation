@@ -38,11 +38,13 @@ public class NavigationCommandsHandler {
 
     public static void startApp(Bundle params) {
         Intent intent = new Intent(NavigationApplication.instance, NavigationActivity.class);
-        IntentDataHandler.onStartApp(intent);
+        intent.setAction(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(ACTIVITY_PARAMS_BUNDLE, params);
         intent.putExtra("animationType", params.getString("animationType"));
-        NavigationApplication.instance.startActivity(intent);
+        IntentDataHandler.saveIntentData(intent);
+
+        NavigationApplication.instance.startApp(intent);
     }
 
     public static void updateDrawerToScreen(final Bundle params) {

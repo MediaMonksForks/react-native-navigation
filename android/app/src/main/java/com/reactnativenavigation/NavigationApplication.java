@@ -1,18 +1,19 @@
 package com.reactnativenavigation;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.UIImplementationProvider;
-import com.facebook.react.uimanager.UIManagerModule;
 import com.reactnativenavigation.bridge.EventEmitter;
 import com.reactnativenavigation.controllers.ActivityCallbacks;
 import com.reactnativenavigation.react.NavigationReactGateway;
@@ -28,6 +29,7 @@ public abstract class NavigationApplication extends Application implements React
     private EventEmitter eventEmitter;
     private Handler handler;
     private ActivityCallbacks activityCallbacks;
+    private Intent lastActivityIntent;
 
     @Override
     public void onCreate() {
@@ -127,4 +129,17 @@ public abstract class NavigationApplication extends Application implements React
 
     @Nullable
     public abstract List<ReactPackage> createAdditionalReactPackages();
+
+    public Intent getLastActivityIntent() {
+        return lastActivityIntent;
+    }
+
+    /**
+     * start a new activity with CLEAR_TASK | NEW_TASK
+     */
+
+    public void startApp(Intent intent) {
+        lastActivityIntent = new Intent(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 }

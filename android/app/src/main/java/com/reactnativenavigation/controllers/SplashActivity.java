@@ -1,9 +1,15 @@
 package com.reactnativenavigation.controllers;
 
 import android.graphics.Color;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -11,6 +17,26 @@ import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.ReactDevPermission;
 
 public abstract class SplashActivity extends AppCompatActivity {
+    private BroadcastReceiver navigationIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final ComponentName component = intent.getComponent();
+            if (component == null) {
+                return;
+            }
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this);
+
+            final String className = component.getClassName();
+            if (!NavigationActivity.class.getName().equals(className)) {
+                return;
+            }
+
+            continueToStartAppIntent();
+        }
+    };
+
+    boolean screenIsVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,25 +46,33 @@ public abstract class SplashActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    private void registerToNavigationActivityLaunch() {
+        LocalBroadcastManager.getInstance(NavigationApplication.instance).registerReceiver(navigationIntentReceiver, new IntentFilter(Intent.ACTION_VIEW));
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-
-        if (NavigationApplication.instance.getReactGateway().hasStartedCreatingContext()) {
-            finish();
-            return;
-        }
+        screenIsVisible = true;
+        registerToNavigationActivityLaunch();
 
         if (ReactDevPermission.shouldAskPermission()) {
             ReactDevPermission.askPermission(this);
             return;
         }
 
-        if (NavigationApplication.instance.isReactContextInitialized()) {
-            finish();
+        if (NavigationApplication.instance.getReactGateway().hasStartedCreatingContext()) {
+            if (NavigationApplication.instance.isReactContextInitialized() && NavigationApplication.instance.getLastActivityIntent() != null) {
+                continueToStartAppIntent();
+            }
             return;
         }
 
-        // TODO I'm starting to think this entire flow is incorrect and should be done in Application
         NavigationApplication.instance.startReactContextOnceInBackgroundAndExecuteJS();
     }
 
@@ -49,6 +83,10 @@ public abstract class SplashActivity extends AppCompatActivity {
         } else {
             setContentView(createSplashLayout());
         }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        screenIsVisible = false;
     }
 
     /**
@@ -58,6 +96,14 @@ public abstract class SplashActivity extends AppCompatActivity {
     public int getSplashLayout() {
         return 0;
     }
+    private void continueToStartAppIntent() {
+        final Intent startAppIntent = NavigationApplication.instance.getLastActivityIntent();
+        if (startAppIntent != null && screenIsVisible) {
+            NavigationApplication.instance.startActivity(startAppIntent);
+            finish();
+        }
+    }
+
 
     /**
      * @return the layout you would like to show while react's js context loads
