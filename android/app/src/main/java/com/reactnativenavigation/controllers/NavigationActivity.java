@@ -59,6 +59,15 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
      */
     static NavigationActivity currentActivity;
 
+
+    /**
+     * This receiver works lets the user hot-reload the RN app by typing R twice.
+     *
+     * When the user types R twice, the JS context of that moment is recreated, and a new NavigationActivity is launched.
+     * by invoking NavigationCommandsHandler.startApp(), which broadcasts the Intent of the new Activity.
+     *
+     * This receiver is supposed to handle ONLY this Intent, hence it should be registered only on debug builds.
+     */
     private BroadcastReceiver navigationIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -98,9 +107,11 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
             LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(navigationIntentReceiver, new IntentFilter(Intent.ACTION_VIEW));
         }
 
+        // While NavigationActivity's are launched when the JS context is fully initialized, they may also be re-created by Android on push notifications.
+        // Therefore I think IntentHandler needs to handle our originating Intent before it is handled by ActivityCallbacks.
         IntentDataHandler.onResume(getIntent());
+
         if (!NavigationApplication.instance.isReactContextInitialized()) {
-            IntentDataHandler.onResume(getIntent());
             _savedExtras = getIntent().getExtras();
             NavigationApplication.instance.startReactContextOnceInBackgroundAndExecuteJS();
             return;
@@ -167,6 +178,8 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
+        // See comment at onCreate() regarding IntentHandler.
         IntentDataHandler.onResume(getIntent());
         setIntent(intent);
         getReactGateway().onNewIntent(intent);

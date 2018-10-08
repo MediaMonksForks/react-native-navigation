@@ -58,7 +58,10 @@ class IntentDataHandler {
     private static void setIntentData(@Nullable Intent intent) {
         if (intent != null && IntentDataHandler.intent != null) {
             intent.setData(IntentDataHandler.intent.getData());
-            intent.putExtras(IntentDataHandler.intent);
+            // Not every Intent comes with the extras Bundle
+            if (intent.getExtras() != null) {
+                intent.putExtras(IntentDataHandler.intent);
+            }
             intent.setAction(ACTION_VIEW);
         }
     }

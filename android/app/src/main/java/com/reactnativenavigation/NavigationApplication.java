@@ -1,7 +1,6 @@
 package com.reactnativenavigation;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +28,11 @@ public abstract class NavigationApplication extends Application implements React
     private EventEmitter eventEmitter;
     private Handler handler;
     private ActivityCallbacks activityCallbacks;
+
+    // Keeps the last Intent used at startApp() to open a NavigationActivity instance when the JS context initialization was run (NavigationCommandsHandler.startApp())
+    // Prior to this, when that method was run, it launched the NavigationActivity directly. This meant that no Activity was responsible for kicking off the app UI,
+    // and it also meant that the UI incorrectly popped up when a push notification re-created the Application context.
+    // To prevent this, now we just keep the Intent to launch the UI, and the Activity's are responsible for starting a new instance when necessary.
     private Intent lastActivityIntent;
 
     @Override
@@ -135,10 +139,10 @@ public abstract class NavigationApplication extends Application implements React
     }
 
     /**
-     * start a new activity with CLEAR_TASK | NEW_TASK
+     * This
      */
 
-    public void startApp(Intent intent) {
+    public void startAppWhenPossible(Intent intent) {
         lastActivityIntent = new Intent(intent);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }

@@ -17,6 +17,9 @@ import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.ReactDevPermission;
 
 public abstract class SplashActivity extends AppCompatActivity {
+
+    // This receiver receives the Intent to launch a new NavigationActivity.
+    // Since this starts an Activity, it is only registered when the current Activity is visible.
     private BroadcastReceiver navigationIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -25,7 +28,7 @@ public abstract class SplashActivity extends AppCompatActivity {
                 return;
             }
 
-            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this);
+            unregisterToNavigationActivityLaunch();
 
             final String className = component.getClassName();
             if (!NavigationActivity.class.getName().equals(className)) {
@@ -36,7 +39,6 @@ public abstract class SplashActivity extends AppCompatActivity {
         }
     };
 
-    boolean screenIsVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +57,14 @@ public abstract class SplashActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(NavigationApplication.instance).registerReceiver(navigationIntentReceiver, new IntentFilter(Intent.ACTION_VIEW));
     }
 
+    private void unregisterToNavigationActivityLaunch() {
+        LocalBroadcastManager.getInstance(NavigationApplication.instance).unregisterReceiver(navigationIntentReceiver);
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        screenIsVisible = true;
         registerToNavigationActivityLaunch();
 
         if (ReactDevPermission.shouldAskPermission()) {
@@ -66,6 +72,18 @@ public abstract class SplashActivity extends AppCompatActivity {
             return;
         }
 
+        /*
+         * Previously JS contexts were destroyed when a NavigationActivity was destroyed.
+         * I found this not unsatisfactory, because when the app is in the background and the app launcher is used,
+         * SplashActivity will cause other Activity instances to be destroyed,
+         * but that destruction may occur AFTER SplashActivity.onResume() determined that we DO have a JS context.
+         * This miscommunication caused SplashActivity to launch a new NavigationActivity with no JS context,
+         * which in turn caused it to start JS context initialization and to launch yet another NavigationActivity.
+         *
+         * By destroying and re-creating the JS context here instead of waiting for the old Activity to do it,
+         * we save the user from staring at a blank screen for a couple of seconds.
+         *
+         */
         if (NavigationApplication.instance.getReactGateway().hasStartedCreatingContext()) {
             if (NavigationApplication.instance.isReactContextInitialized()) {
                 NavigationApplication.instance.getReactGateway().onDestroyApp();
@@ -86,7 +104,7 @@ public abstract class SplashActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        screenIsVisible = false;
+        unregisterToNavigationActivityLaunch();
     }
 
     /**
@@ -99,7 +117,7 @@ public abstract class SplashActivity extends AppCompatActivity {
 
     private void continueToStartAppIntent() {
         final Intent startAppIntent = NavigationApplication.instance.getLastActivityIntent();
-        if (startAppIntent != null && screenIsVisible) {
+        if (startAppIntent != null) {
             NavigationApplication.instance.startActivity(startAppIntent);
         }
     }

@@ -31,7 +31,12 @@ public class NavigationCommandsHandler {
     }
 
     /**
-     * start a new activity with CLEAR_TASK | NEW_TASK
+     * Start a new NavigationActivity with CLEAR_TASK | NEW_TASK,
+     * provided that one of the app Activities is in the foreground.
+     *
+     * Previously this Activity launch was inconditional, but that caused the app UI to pop up when
+     * a push notification made the app re-create its Application context.
+     *
      *
      * @param params ActivityParams as bundle
      */
@@ -44,7 +49,7 @@ public class NavigationCommandsHandler {
         intent.putExtra("animationType", params.getString("animationType"));
         IntentDataHandler.saveIntentData(intent);
 
-        NavigationApplication.instance.startApp(intent);
+        NavigationApplication.instance.startAppWhenPossible(intent);
     }
 
     public static void updateDrawerToScreen(final Bundle params) {
