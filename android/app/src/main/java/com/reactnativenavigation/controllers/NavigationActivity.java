@@ -1,12 +1,17 @@
 package com.reactnativenavigation.controllers;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -15,6 +20,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
+import com.reactnativenavigation.BuildConfig;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.events.Event;
 import com.reactnativenavigation.events.EventBus;
@@ -53,6 +59,30 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
      */
     static NavigationActivity currentActivity;
 
+    private BroadcastReceiver navigationIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // This is here only for restarting the UI on a reload command (RR)
+            if (!BuildConfig.DEBUG) {
+                return;
+            }
+
+            final ComponentName component = intent.getComponent();
+            if (component == null) {
+                return;
+            }
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this);
+
+            final String className = component.getClassName();
+            if (!NavigationActivity.class.getName().equals(className)) {
+                return;
+            }
+
+            NavigationApplication.instance.startActivity(intent);
+        }
+    };
+
     private ActivityParams activityParams;
     private ModalController modalController;
     private Layout layout;
@@ -63,6 +93,12 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (BuildConfig.DEBUG) {
+            LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(navigationIntentReceiver, new IntentFilter(Intent.ACTION_VIEW));
+        }
+
+        IntentDataHandler.onResume(getIntent());
         if (!NavigationApplication.instance.isReactContextInitialized()) {
             IntentDataHandler.onResume(getIntent());
             _savedExtras = getIntent().getExtras();
