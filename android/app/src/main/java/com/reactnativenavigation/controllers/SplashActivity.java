@@ -67,12 +67,10 @@ public abstract class SplashActivity extends AppCompatActivity {
         }
 
         if (NavigationApplication.instance.getReactGateway().hasStartedCreatingContext()) {
-            if (NavigationApplication.instance.isReactContextInitialized() && NavigationApplication.instance.getLastActivityIntent() != null) {
-                continueToStartAppIntent();
+            if (NavigationApplication.instance.isReactContextInitialized()) {
+                NavigationApplication.instance.getReactGateway().onDestroyApp();
             }
-            return;
         }
-
         NavigationApplication.instance.startReactContextOnceInBackgroundAndExecuteJS();
     }
 
@@ -83,6 +81,8 @@ public abstract class SplashActivity extends AppCompatActivity {
         } else {
             setContentView(createSplashLayout());
         }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -96,11 +96,11 @@ public abstract class SplashActivity extends AppCompatActivity {
     public int getSplashLayout() {
         return 0;
     }
+
     private void continueToStartAppIntent() {
         final Intent startAppIntent = NavigationApplication.instance.getLastActivityIntent();
         if (startAppIntent != null && screenIsVisible) {
             NavigationApplication.instance.startActivity(startAppIntent);
-            finish();
         }
     }
 

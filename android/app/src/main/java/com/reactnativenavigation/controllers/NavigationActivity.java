@@ -156,7 +156,6 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     @Override
     protected void onDestroy() {
         destroyLayouts();
-        destroyJsIfNeeded();
         NavigationApplication.instance.getActivityCallbacks().onActivityDestroyed(this);
         super.onDestroy();
     }
@@ -168,12 +167,6 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
         if (layout != null) {
             layout.destroy();
             layout = null;
-        }
-    }
-
-    private void destroyJsIfNeeded() {
-        if (currentActivity == null || currentActivity.isFinishing()) {
-            getReactGateway().onDestroyApp();
         }
     }
 
